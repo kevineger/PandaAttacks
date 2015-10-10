@@ -63,7 +63,7 @@ function scene:create( event )
 		numFrames = 4,
 	}
 
-	pandaSheet = graphics.newImageSheet( "panda_sprite.png", panada_options )
+	pandaSheet = graphics.newImageSheet( "assets/images/panda_sprite.png", panada_options )
 	panda = display.newSprite( pandaSheet, { name="panda", start=1, count=4, time=1000 } )
 	panda.anchorX = 0.5
 	panda.anchorY = 0.5 - 100

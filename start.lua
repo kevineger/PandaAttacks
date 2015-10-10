@@ -10,33 +10,37 @@ local scene = composer.newScene()
 local backingMusic
 local bassBoom
 
-function blurBackground(bg, l1, l2)
+function blurBackground(bg, p)
    -- Blur the background
    bg.fill.effect = "filter.blurVertical"
    bg.fill.effect.blurSize = 20
    bg.fill.effect.sigma = 140
-   l1.fill.effect = "filter.blurHorizontal"
-   l1.fill.effect.blurSize = 80
-   l1.fill.effect.sigma = 140
-   l2.fill.effect = "filter.blurHorizontal"
-   l2.fill.effect.blurSize = 80
-   l2.fill.effect.sigma = 140
+   -- l1.fill.effect = "filter.blurHorizontal"
+   -- l1.fill.effect.blurSize = 80
+   -- l1.fill.effect.sigma = 140
+   -- l2.fill.effect = "filter.blurHorizontal"
+   -- l2.fill.effect.blurSize = 80
+   -- l2.fill.effect.sigma = 140
+   p.fill.effect = "filter.blurVertical"
+   p.fill.effect.blurSize = 20
+   p.fill.effect.sigma = 140
    -- After x miliseconds, return the background to original form
    timer.performWithDelay(100,
       function()
          -- audio.play(bassBoom)
-         normalBackground(bg, l1, l2)
+         normalBackground(bg, p)
       end, 1)
 end
 
 -- normalize the background
-function normalBackground(bg, l1, l2)
+function normalBackground(bg, p)
    bg.fill.effect = nil
-   l1.fill.effect = nil
-   l2.fill.effect = nil
+   -- l1.fill.effect = nil
+   -- l2.fill.effect = nil
+   p.fill.effect = nil
    timer.performWithDelay(math.random(500, 6000),
       function()
-         blurBackground(bg, l1, l2)
+         blurBackground(bg, p)
       end, 1)
 end
 
@@ -50,7 +54,7 @@ function scene:create( event )
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
    -- Set the background
-   background = display.newImageRect("splashBg.jpg",900,1425)
+   background = display.newImageRect("assets/images/splashBg.jpg",900,1425)
    background.anchorX = 0.5
    background.anchorY = 1
    -- Place background image in center of screen
@@ -58,37 +62,46 @@ function scene:create( event )
    background.y = display.contentHeight
    -- screenGroup:insert(background)
 
-   title = display.newImageRect("PandaAttacks.png",800,300)
+   title = display.newImageRect("assets/images/PandaAttacks.png",800,300)
    title:scale(0.7, 0.7)
    title.anchorX = 0.5
    title.anchorY = 1
    title.x = display.contentCenterX
    title.y = display.contentHeight - 900
 
-   -- Adds level one icon
-   levelOne = display.newImageRect("levelOneGrey.png",700,700)
-   levelOne:scale(0.5, 0.5)
-   levelOne.anchorX = 0.5
-   levelOne.anchorY = 1
-   levelOne.x = display.contentCenterX - 150
-   levelOne.y = display.contentHeight - 500
-   -- screenGroup:insert(levelOne)
+   play = display.newImageRect("assets/images/play.png",800,300)
+   play:scale(0.7, 0.7)
+   play.anchorX = 0.5
+   play.anchorY = 1
+   play.x = display.contentCenterX
+   play.y = display.contentHeight - 700
 
-   -- Adds level two icon
-   levelTwo = display.newImageRect("levelTwo.png",700,700)
-   levelTwo:scale(0.5, 0.5)
-   levelTwo.anchorX = 0.5
-   levelTwo.anchorY = 1
-   levelTwo.x = display.contentCenterX + 150
-   levelTwo.y = display.contentHeight - 500
-   -- screenGroup:insert(levelTwo)
+
+   -- -- Adds level one icon
+   -- levelOne = display.newImageRect("levelOneGrey.png",700,700)
+   -- levelOne:scale(0.5, 0.5)
+   -- levelOne.anchorX = 0.5
+   -- levelOne.anchorY = 1
+   -- levelOne.x = display.contentCenterX - 150
+   -- levelOne.y = display.contentHeight - 500
+   -- -- screenGroup:insert(levelOne)
+
+   -- -- Adds level two icon
+   -- levelTwo = display.newImageRect("levelTwo.png",700,700)
+   -- levelTwo:scale(0.5, 0.5)
+   -- levelTwo.anchorX = 0.5
+   -- levelTwo.anchorY = 1
+   -- levelTwo.x = display.contentCenterX + 150
+   -- levelTwo.y = display.contentHeight - 500
+   -- -- screenGroup:insert(levelTwo)
 
    -- Load the audio tracks
-   backingMusic = audio.loadStream("backgroundMusic.mp3")
-   bassBoom = audio.loadSound("drum.mp3")
+   backingMusic = audio.loadStream("assets/audio/backgroundMusic.mp3")
+   bassBoom = audio.loadSound("assets/audio/drum.mp3")
 
    -- Animate the scene background
-   blurBackground(background, levelOne, levelTwo)
+   -- blurBackground(background, levelOne, levelTwo)
+   blurBackground(background, play)
 
 end
 
