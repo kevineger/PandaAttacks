@@ -12,10 +12,7 @@ local bassBoom
 
 function startGame(event)
    print "Hit start button"
-   composer.gotoScene("intro_1")
-   if event.phase == "ended" then
-      composer.gotoScene("intro_1")
-   end
+   composer.gotoScene("game")
 end
 
 function blurBackground(bg, p)
@@ -23,92 +20,109 @@ function blurBackground(bg, p)
    bg.fill.effect = "filter.blurVertical"
    bg.fill.effect.blurSize = 20
    bg.fill.effect.sigma = 140
-   -- l1.fill.effect = "filter.blurHorizontal"
-   -- l1.fill.effect.blurSize = 80
-   -- l1.fill.effect.sigma = 140
-   -- l2.fill.effect = "filter.blurHorizontal"
-   -- l2.fill.effect.blurSize = 80
-   -- l2.fill.effect.sigma = 140
+   -- Blur the PLAY text
    p.fill.effect = "filter.blurHorizontal"
    p.fill.effect.blurSize = 80
-   p.fill.effect.sigma = 140
+   p.fill.effect.sigma = 200
+   -- Display the panda
+   displayPanda()
+   -- Play the audio
+   -- audio.play(bassBoom)
    -- After x miliseconds, return the background to original form
-   timer.performWithDelay(100,
+   normalTimer = timer.performWithDelay(300,
       function()
-         -- audio.play(bassBoom)
+         -- Normalize the background
          normalBackground(bg, p)
+         title:scale(0.5, 0.5)
+         title.rotation = 0
       end, 1)
 end
 
 -- normalize the background
 function normalBackground(bg, p)
    bg.fill.effect = nil
-   -- l1.fill.effect = nil
-   -- l2.fill.effect = nil
    p.fill.effect = nil
-   timer.performWithDelay(math.random(500, 6000),
+   panda:removeSelf()
+   blurTimer = timer.performWithDelay(math.random(500, 6000),
       function()
          blurBackground(bg, p)
       end, 1)
+end
+
+-- display the panda
+function displayPanda()
+   panda = display.newImageRect(sceneGroup, "assets/images/panda.png", 1000, 1000)
+   panda:scale(0.5, 0.5)
+   panda.anchorX = 0.5
+   panda.anchorY = 0.5
+   -- Increase Title Size
+   title:scale(2, 2)
+   title.rotation = 20
+   local side = math.random(0, 1)
+   if ( side == 0 ) then
+      -- Left Side
+      panda.x = 120
+      panda.y = display.contentHeight - math.random(100, 800)
+      panda.rotation = 60
+
+   elseif ( side == 1 ) then
+      -- Right Side
+      panda.x = display.contentWidth - 80
+      panda.y = display.contentHeight - math.random(100, 800)
+      panda.rotation = 300
+   end
+
 end
 
 ---------------------------------------------------------------------------------
 
 -- "scene:create()"
 function scene:create( event )
+   print "Creating Scene"
 
-   local sceneGroup = self.view
+   sceneGroup = self.view
 
-   -- Initialize the scene here.
-   -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+   -- Load the audio tracks
+   backingMusic = audio.loadStream("assets/audio/backgroundMusic.mp3")
+   bassBoom = audio.loadSound("assets/audio/drum.mp3")
+
    -- Set the background
-   background = display.newImageRect("assets/images/splashBg.jpg",900,1425)
+   background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
    background.anchorX = 0.5
    background.anchorY = 1
    -- Place background image in center of screen
    background.x = display.contentCenterX
    background.y = display.contentHeight
-   -- screenGroup:insert(background)
 
-   title = display.newImageRect("assets/images/PandaAttacks.png",800,300)
+   title = display.newImageRect(sceneGroup, "assets/images/PandaAttacks.png",800,300)
    title:scale(0.7, 0.7)
    title.anchorX = 0.5
    title.anchorY = 1
    title.x = display.contentCenterX
    title.y = display.contentHeight - 900
 
-   play = display.newImageRect("assets/images/play.png",800,300)
+   play = display.newImageRect(sceneGroup, "assets/images/play.png",800,300)
    play:scale(0.7, 0.7)
    play.anchorX = 0.5
    play.anchorY = 1
    play.x = display.contentCenterX
-   play.y = display.contentHeight - 700
+   play.y = display.contentHeight - 600
 
+   tutorial = display.newImageRect(sceneGroup, "assets/images/tutorial.png",1300,500)
+   tutorial:scale(0.3, 0.3)
+   tutorial.anchorX = 0.5
+   tutorial.anchorY = 1
+   tutorial.x = display.contentCenterX - 200
+   tutorial.y = display.contentHeight
 
-   -- -- Adds level one icon
-   -- levelOne = display.newImageRect("levelOneGrey.png",700,700)
-   -- levelOne:scale(0.5, 0.5)
-   -- levelOne.anchorX = 0.5
-   -- levelOne.anchorY = 1
-   -- levelOne.x = display.contentCenterX - 150
-   -- levelOne.y = display.contentHeight - 500
-   -- -- screenGroup:insert(levelOne)
-
-   -- -- Adds level two icon
-   -- levelTwo = display.newImageRect("levelTwo.png",700,700)
-   -- levelTwo:scale(0.5, 0.5)
-   -- levelTwo.anchorX = 0.5
-   -- levelTwo.anchorY = 1
-   -- levelTwo.x = display.contentCenterX + 150
-   -- levelTwo.y = display.contentHeight - 500
-   -- -- screenGroup:insert(levelTwo)
-
-   -- Load the audio tracks
-   backingMusic = audio.loadStream("assets/audio/backgroundMusic.mp3")
-   bassBoom = audio.loadSound("assets/audio/drum.mp3")
+   tutorial = display.newImageRect(sceneGroup, "assets/images/credits.png",1300,500)
+   tutorial:scale(0.3, 0.3)
+   tutorial.anchorX = 0.5
+   tutorial.anchorY = 1
+   tutorial.x = display.contentCenterX + 200
+   tutorial.y = display.contentHeight
 
    -- Animate the scene background
-   -- blurBackground(background, levelOne, levelTwo)
    blurBackground(background, play)
 
 end
@@ -140,10 +154,15 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
+      play:removeEventListener("touch", startGame)
+      backingMusic = nil
+      bassBoom = nil
+      sceneGroup = nil
+      timer.cancel(normalTimer)
+      timer.cancel(blurTimer)
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
       -- Remove play button event listener
-      -- play:removeEventListener("touch", startGame)
    end
 end
 

@@ -36,6 +36,7 @@ end
 
 -- "scene:create()"
 function scene:create( event )
+	print "game.lua: create"
 
    	local sceneGroup = self.view
 
@@ -93,6 +94,8 @@ end
 
 -- "scene:show()"
 function scene:show( event )
+
+	print "game.lua: show"
 
    local sceneGroup = self.view
    local phase = event.phase
