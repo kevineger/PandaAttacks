@@ -25,17 +25,16 @@ end
 function scene:create( event )
 
    	local sceneGroup = self.view
-   
-   	gameStarted = false
-   	mydata.score = 0
 
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	
-   	local background = display.newRect(0,0, display.contentWidth ,display.contentHeight)
-	background:setFillColor( 255, 255, 255 )  
-	background.x = display.contentCenterX
-	background.y = display.contentCenterY
+   	local background = display.newImageRect("assets/images/splashBg.jpg",900,1425)
+   	background.anchorX = 0.5
+   	background.anchorY = 1
+   	-- Place background image in center of screen
+   	background.x = display.contentCenterX
+   	background.y = display.contentHeight
 	sceneGroup:insert(background)
 
 	local introtext_content = "Oh no, a panda made his way into our server room! At " 
@@ -45,15 +44,15 @@ function scene:create( event )
 
    	local introtext_options = {
 	    text = introtext_content,
-	    x = 400,
-	    y = 200,
-	    width = display.contentWidth-100,     --required for multi-line and alignment
+	    x = display.contentCenterX,
+	    y = 300,
+	    width = display.contentWidth - 100,     --required for multi-line and alignment
 	    font = native.systemFont,   
-	    fontSize = 40,
+	    fontSize = 50,
 	}
 
    	local introtext = display.newText(introtext_options)
-	introtext:setFillColor(0,0,0)
+	introtext:setFillColor(255, 255, 255)
 	sceneGroup:insert(introtext)
 
 	panada_options = {
@@ -63,20 +62,31 @@ function scene:create( event )
 		numFrames = 4,
 	}
 
+	local systemFonts = native.getFontNames()
+
+	-- Set the string to query for (part of the font name to locate)
+	local searchString = "pt"
+
+	-- Display each font in the Terminal/console
+	for i, fontName in ipairs( systemFonts ) do
+
+	    local j, k = string.find( string.lower(fontName), string.lower(searchString) )
+
+	    if ( j ~= nil ) then
+	        print( "Font Name = " .. tostring( fontName ) )
+	    end
+	end
+
 	pandaSheet = graphics.newImageSheet( "assets/images/panda_sprite.png", panada_options )
 	panda = display.newSprite( pandaSheet, { name="panda", start=1, count=4, time=1000 } )
-	panda.anchorX = 0.5
-	panda.anchorY = 0.5 - 100
-	panda.x = display.contentCenterX
-	panda.y = display.contentCenterY
+	panda.x = display.contentCenterX - 100	
+	panda.y = display.contentCenterY + 450
 	panda:play()
 	sceneGroup:insert(panda)
 
 end
 
 -- "scene:show()"
-
-
 function scene:show( event )
 
    local sceneGroup = self.view
