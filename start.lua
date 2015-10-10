@@ -10,6 +10,14 @@ local scene = composer.newScene()
 local backingMusic
 local bassBoom
 
+function startGame(event)
+   print "Hit start button"
+   composer.gotoScene("intro_1")
+   if event.phase == "ended" then
+      composer.gotoScene("intro_1")
+   end
+end
+
 function blurBackground(bg, p)
    -- Blur the background
    bg.fill.effect = "filter.blurVertical"
@@ -21,8 +29,8 @@ function blurBackground(bg, p)
    -- l2.fill.effect = "filter.blurHorizontal"
    -- l2.fill.effect.blurSize = 80
    -- l2.fill.effect.sigma = 140
-   p.fill.effect = "filter.blurVertical"
-   p.fill.effect.blurSize = 20
+   p.fill.effect = "filter.blurHorizontal"
+   p.fill.effect.blurSize = 80
    p.fill.effect.sigma = 140
    -- After x miliseconds, return the background to original form
    timer.performWithDelay(100,
@@ -115,6 +123,7 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+      play:addEventListener("tap", startGame)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -135,7 +144,8 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
-
+      -- Remove play button event listener
+      -- play:removeEventListener("touch", startGame)
    end
 end
 
