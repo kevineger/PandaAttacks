@@ -1,3 +1,3 @@
 local composer = require("composer")
-composer.gotoScene( "start" )
+composer.gotoScene( "select" )
 
