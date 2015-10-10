@@ -12,6 +12,20 @@ local mydata = require( "mydata" )
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
+ 
+function updateDialog(dialog, str)
+	return function()
+		dialog.text = dialog.text .. str
+    end
+end
+
+function typeWriter(dialog, str)
+	for i = 1, #str do
+	    local letter = str:sub(i,i)
+	    local step = 50
+	    timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
+	end
+end
 
 -- prevent memory loss
 function checkMemory()
@@ -20,64 +34,65 @@ function checkMemory()
    --print( memUsage_str, "TEXTURE = "..(system.getInfo("textureMemoryUsed") / (1024 * 1024) ) )
 end
 
-
 -- "scene:create()"
 function scene:create( event )
 	print "game.lua: create"
 
    	local sceneGroup = self.view
-   
-   	gameStarted = false
-   	mydata.score = 0
 
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	
-   	local background = display.newRect(0,0, display.contentWidth ,display.contentHeight)
-	background:setFillColor( 255, 255, 255 )  
-	background.x = display.contentCenterX
-	background.y = display.contentCenterY
+   	local background = display.newImageRect("assets/images/splashBg.jpg",900,1425)
+   	background.anchorX = 0.5
+   	background.anchorY = 1
+   	-- Place background image in center of screen
+   	background.x = display.contentCenterX
+   	background.y = display.contentHeight
 	sceneGroup:insert(background)
 
-	local introtext_content = "Oh no, a panda made his way into our server room! At " 
-		.. "first the panda seemed captivated by the computer system’s whirling and beeping, " 
-		.."but it didn’t take long for the sounds to anger him. He has now begun to rip "
+	local introtext_content = "Oh no, Panda made his way into our server room! At " 
+		.. "first he seemed to be captivated by the computer system's whirling and beeping, " 
+		.."but it didn't take long for the sounds to anger him. Panda has now begun to rip "
 		.."out the computer cables and hardware."
 
-   	local introtext_options = {
-	    text = introtext_content,
-	    x = 400,
-	    y = 200,
-	    width = display.contentWidth-100,     --required for multi-line and alignment
-	    font = native.systemFont,   
-	    fontSize = 40,
+	local introtext_options = {
+	    text = '',
+	    x = display.contentCenterX,
+	    y = 300,
+	    width = display.contentWidth - 100,     --required for multi-line and alignment
+	    font = "PTMono-Bold",   
+	    fontSize = 45,
 	}
 
-   	local introtext = display.newText(introtext_options)
-	introtext:setFillColor(0,0,0)
+	local introtext = display.newText( introtext_options )
+	typeWriter(introtext, introtext_content)
+
 	sceneGroup:insert(introtext)
 
-	panada_options = {
-		-- Required params
+	local panada_options = {
 		width = 500,
 		height = 318,
 		numFrames = 4,
 	}
 
-	pandaSheet = graphics.newImageSheet( "assets/images/panda_sprite.png", panada_options )
-	panda = display.newSprite( pandaSheet, { name="panda", start=1, count=4, time=1000 } )
-	panda.anchorX = 0.5
-	panda.anchorY = 0.5 - 100
-	panda.x = display.contentCenterX
-	panda.y = display.contentCenterY
+	local pandaSheet = graphics.newImageSheet( "assets/images/panda_sprite.png", panada_options )
+	local panda = display.newSprite( pandaSheet, { name="panda", start=1, count=4, time=1000 } )
+	panda:scale(1.2, 1.2)
+	panda.x = 300 
+	panda.y = display.contentHeight - 275
 	panda:play()
 	sceneGroup:insert(panda)
+
+	local continue = display.newImageRect("assets/images/continue.png",431,116)
+	continue:scale(0.7, 0.7)
+   	continue.x = display.contentWidth - 175
+   	continue.y = display.contentHeight - 75
+   	sceneGroup:insert(continue)
 
 end
 
 -- "scene:show()"
-
-
 function scene:show( event )
 
 	print "game.lua: show"
