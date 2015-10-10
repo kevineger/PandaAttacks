@@ -45,7 +45,9 @@ function normalBackground(bg, p)
 end
 
 ---------------------------------------------------------------------------------
-
+function toGame(event)
+   composer.gotoScene( "finderrors" )
+end
 -- "scene:create()"
 function scene:create( event )
 
@@ -75,7 +77,7 @@ function scene:create( event )
    play.anchorY = 1
    play.x = display.contentCenterX
    play.y = display.contentHeight - 700
-
+   play:addEventListener("tap", toGame)
 
    -- -- Adds level one icon
    -- levelOne = display.newImageRect("levelOneGrey.png",700,700)
