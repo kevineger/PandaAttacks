@@ -12,9 +12,9 @@ local bassBoom
 
 function startGame(event)
    print "Hit start button"
-   composer.gotoScene("game")
+   composer.gotoScene("intro_1")
    if event.phase == "ended" then
-      composer.gotoScene("game")
+      composer.gotoScene("intro_1")
    end
 end
 

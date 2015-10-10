@@ -13,6 +13,28 @@ local mydata = require( "mydata" )
 
 ---------------------------------------------------------------------------------
 
+function loadWords(s)
+	local temp = {}
+	for word in string.gmatch(s, "[^%s]+") do
+	   table.insert(temp, word)
+	end
+	return temp
+end
+ 
+function updateDialog(dialog, str)
+	return function()
+		dialog.text = dialog.text .. " " .. str
+    end
+end
+
+function displayWords(dialog, words)
+	for i = 1, #words do
+		dialog.text = dialog.text .. " " .. words[i]
+		local step = 250
+		timer.performWithDelay(2000 + step * i, updateDialog(dialog, words[i]))
+	end 
+end
+
 -- prevent memory loss
 function checkMemory()
    collectgarbage( "collect" )
@@ -42,7 +64,7 @@ function scene:create( event )
 		.."but it didn’t take long for the sounds to anger him. He has now begun to rip "
 		.."out the computer cables and hardware."
 
-   	local introtext_options = {
+	local introtext_options = {
 	    text = introtext_content,
 	    x = display.contentCenterX,
 	    y = 300,
@@ -51,8 +73,10 @@ function scene:create( event )
 	    fontSize = 50,
 	}
 
-   	local introtext = display.newText(introtext_options)
-	introtext:setFillColor(255, 255, 255)
+	local text = loadWords(introtext_content)
+	local introtext = display.newText( introtext_options )
+
+	displayWords(introtext, text)
 	sceneGroup:insert(introtext)
 
 	panada_options = {
