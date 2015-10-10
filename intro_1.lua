@@ -12,27 +12,19 @@ local mydata = require( "mydata" )
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
-
-function loadWords(s)
-	local temp = {}
-	for word in string.gmatch(s, "[^%s]+") do
-	   table.insert(temp, word)
-	end
-	return temp
-end
  
 function updateDialog(dialog, str)
 	return function()
-		dialog.text = dialog.text .. " " .. str
+		dialog.text = dialog.text .. str
     end
 end
 
-function displayWords(dialog, words)
-	for i = 1, #words do
-		dialog.text = dialog.text .. " " .. words[i]
-		local step = 250
-		timer.performWithDelay(2000 + step * i, updateDialog(dialog, words[i]))
-	end 
+function typeWriter(dialog, str)
+	for i = 1, #str do
+	    local letter = str:sub(i,i)
+	    local step = 50
+	    timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
+	end
 end
 
 -- prevent memory loss
@@ -41,7 +33,6 @@ function checkMemory()
    local memUsage_str = string.format( "MEMORY = %.3f KB", collectgarbage( "count" ) )
    --print( memUsage_str, "TEXTURE = "..(system.getInfo("textureMemoryUsed") / (1024 * 1024) ) )
 end
-
 
 -- "scene:create()"
 function scene:create( event )
@@ -59,54 +50,44 @@ function scene:create( event )
    	background.y = display.contentHeight
 	sceneGroup:insert(background)
 
-	local introtext_content = "Oh no, a panda made his way into our server room! At " 
-		.. "first the panda seemed captivated by the computer system’s whirling and beeping, " 
-		.."but it didn’t take long for the sounds to anger him. He has now begun to rip "
+	local introtext_content = "Oh no, Panda made his way into our server room! At " 
+		.. "first he seemed to be captivated by the computer system's whirling and beeping, " 
+		.."but it didn't take long for the sounds to anger him. Panda has now begun to rip "
 		.."out the computer cables and hardware."
 
 	local introtext_options = {
-	    text = introtext_content,
+	    text = '',
 	    x = display.contentCenterX,
 	    y = 300,
 	    width = display.contentWidth - 100,     --required for multi-line and alignment
-	    font = native.systemFont,   
-	    fontSize = 50,
+	    font = "PTMono-Bold",   
+	    fontSize = 45,
 	}
 
-	local text = loadWords(introtext_content)
 	local introtext = display.newText( introtext_options )
+	typeWriter(introtext, introtext_content)
 
-	displayWords(introtext, text)
 	sceneGroup:insert(introtext)
 
-	panada_options = {
-		-- Required params
+	local panada_options = {
 		width = 500,
 		height = 318,
 		numFrames = 4,
 	}
 
-	local systemFonts = native.getFontNames()
-
-	-- Set the string to query for (part of the font name to locate)
-	local searchString = "pt"
-
-	-- Display each font in the Terminal/console
-	for i, fontName in ipairs( systemFonts ) do
-
-	    local j, k = string.find( string.lower(fontName), string.lower(searchString) )
-
-	    if ( j ~= nil ) then
-	        print( "Font Name = " .. tostring( fontName ) )
-	    end
-	end
-
-	pandaSheet = graphics.newImageSheet( "assets/images/panda_sprite.png", panada_options )
-	panda = display.newSprite( pandaSheet, { name="panda", start=1, count=4, time=1000 } )
-	panda.x = display.contentCenterX - 100	
-	panda.y = display.contentCenterY + 450
+	local pandaSheet = graphics.newImageSheet( "assets/images/panda_sprite.png", panada_options )
+	local panda = display.newSprite( pandaSheet, { name="panda", start=1, count=4, time=1000 } )
+	panda:scale(1.2, 1.2)
+	panda.x = 300 
+	panda.y = display.contentHeight - 275
 	panda:play()
 	sceneGroup:insert(panda)
+
+	local continue = display.newImageRect("assets/images/continue.png",431,116)
+	continue:scale(0.7, 0.7)
+   	continue.x = display.contentWidth - 175
+   	continue.y = display.contentHeight - 75
+   	sceneGroup:insert(continue)
 
 end
 
