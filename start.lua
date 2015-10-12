@@ -11,7 +11,12 @@ local backingMusic
 local bassBoom
 
 function startGame(event)
-   composer.gotoScene("game")
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("game", options)
 end
 
 function blurBackground(bg, p)
@@ -77,8 +82,7 @@ end
 
 -- "scene:create()"
 function scene:create( event )
-   print "Creating Scene"
-
+   
    sceneGroup = self.view
 
    -- Load the audio tracks
