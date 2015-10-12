@@ -2,8 +2,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local mydata = require( "mydata" )
-
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -25,6 +23,10 @@ function typeWriter(dialog, str)
 	    local step = 50
 	    timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
 	end
+end
+
+function nextScene(event)
+   composer.gotoScene('intro_2')
 end
 
 -- prevent memory loss
@@ -80,11 +82,11 @@ function scene:create( event )
 	local panda = display.newSprite( pandaSheet, { name="panda", start=1, count=4, time=1000 } )
 	panda:scale(1.2, 1.2)
 	panda.x = 300 
-	panda.y = display.contentHeight - 275
+	panda.y = display.contentHeight - 300
 	panda:play()
 	sceneGroup:insert(panda)
 
-	local continue = display.newImageRect("assets/images/continue.png",431,116)
+	continue = display.newImageRect("assets/images/continue.png",431,116)
 	continue:scale(0.7, 0.7)
    	continue.x = display.contentWidth - 175
    	continue.y = display.contentHeight - 75
@@ -95,20 +97,18 @@ end
 -- "scene:show()"
 function scene:show( event )
 
-	print "game.lua: show"
-
    local sceneGroup = self.view
    local phase = event.phase
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+      continue:addEventListener("tap", nextScene)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
 	  
 	composer.removeScene("start")	
-	  
    end
 end
 
@@ -122,11 +122,8 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
-	--Runtime:removeEventListener("touch", flyUp)
-	--Runtime:removeEventListener("enterFrame", platform)
-	--timer.cancel(addColumnTimer)
-	--timer.cancel(moveColumnTimer)
-	  
+		continue:removeEventListener("tap", nextScene)
+      	sceneGroup = nil
 	  
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
@@ -154,16 +151,3 @@ scene:addEventListener( "destroy", scene )
 ---------------------------------------------------------------------------------
 
 return scene
-
-
-
-
-
-
-
-
-
-
-
-
-

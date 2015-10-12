@@ -11,7 +11,6 @@ local backingMusic
 local bassBoom
 
 function startGame(event)
-   print "Hit start button"
    composer.gotoScene("game")
 end
 
@@ -154,7 +153,7 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
-      play:removeEventListener("touch", startGame)
+      play:removeEventListener("tap", startGame)
       backingMusic = nil
       bassBoom = nil
       sceneGroup = nil
