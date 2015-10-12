@@ -1,5 +1,5 @@
 display.setStatusBar( display.HiddenStatusBar )
 
 local composer = require("composer")
-composer.gotoScene( "select" )
+composer.gotoScene( "start" )
 

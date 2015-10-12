@@ -16,7 +16,7 @@ function startGame(event)
        effect = "crossFade",
        time = 400,
    }
-   composer.gotoScene("game", options)
+   composer.gotoScene("intro_1", options)
 end
 
 function blurBackground(bg, p)

@@ -26,7 +26,12 @@ function typeWriter(dialog, str)
 end
 
 function nextScene(event)
-   composer.gotoScene('select')
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("select", options)
 end
 
 -- prevent memory loss

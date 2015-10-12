@@ -26,7 +26,12 @@ function typeWriter(dialog, str)
 end
 
 function nextScene(event)
-   composer.gotoScene('intro_2')
+	local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("intro_2", options)
 end
 
 -- prevent memory loss
@@ -53,25 +58,6 @@ function scene:create( event )
    	background.y = display.contentHeight
 	sceneGroup:insert(background)
 
-	local introtext_content = "Oh no, Panda made his way into our server room! At " 
-		.. "first he seemed to be captivated by the computer system's whirling and beeping, " 
-		.."but it didn't take long for the sounds to anger him. Panda has now begun to rip "
-		.."out the computer cables and hardware."
-
-	local introtext_options = {
-	    text = '',
-	    x = display.contentCenterX,
-	    y = 300,
-	    width = display.contentWidth - 100,     --required for multi-line and alignment
-	    font = "PTMono-Bold",   
-	    fontSize = 45,
-	}
-
-	local introtext = display.newText( introtext_options )
-	typeWriter(introtext, introtext_content)
-
-	sceneGroup:insert(introtext)
-
 	local panada_options = {
 		width = 500,
 		height = 318,
@@ -80,8 +66,8 @@ function scene:create( event )
 
 	local pandaSheet = graphics.newImageSheet( "assets/images/panda_sprite.png", panada_options )
 	local panda = display.newSprite( pandaSheet, { name="panda", start=1, count=4, time=1000 } )
-	panda:scale(1.2, 1.2)
-	panda.x = 300 
+	panda:scale(1.3, 1.3)
+	panda.x = 350 
 	panda.y = display.contentHeight - 300
 	panda:play()
 	sceneGroup:insert(panda)
@@ -91,7 +77,6 @@ function scene:create( event )
    	continue.x = display.contentWidth - 175
    	continue.y = display.contentHeight - 75
    	sceneGroup:insert(continue)
-
 end
 
 -- "scene:show()"
@@ -102,13 +87,33 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
-      continue:addEventListener("tap", nextScene)
+      
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-	  
-	composer.removeScene("start")	
+	  	
+		local introtext_content = "Oh no, Panda made his way into our server room! At " 
+			.. "first he seemed to be captivated by the computer system's whirling and beeping, " 
+			.."but it didn't take long for the sounds to anger him. Panda has now begun to rip "
+			.."out the computer cables and hardware."
+
+		local introtext_options = {
+		    text = '',
+		    x = display.contentCenterX,
+		    y = 300,
+		    width = display.contentWidth - 100,     --required for multi-line and alignment
+		    font = "PTMono-Bold",   
+		    fontSize = 40,
+		}
+
+		local introtext = display.newText( introtext_options )
+		typeWriter(introtext, introtext_content)
+
+		sceneGroup:insert(introtext)
+
+	  	continue:addEventListener("tap", nextScene)
+		composer.removeScene("start")	
    end
 end
 
@@ -124,7 +129,6 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
 		continue:removeEventListener("tap", nextScene)
       	sceneGroup = nil
-	  
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
@@ -132,8 +136,8 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
-
    local sceneGroup = self.view
+
 
    -- Called prior to the removal of scene's view ("sceneGroup").
    -- Insert code here to clean up the scene.
