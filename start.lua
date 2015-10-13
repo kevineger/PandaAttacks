@@ -31,7 +31,7 @@ function blurBackground(bg, p)
    -- Display the panda
    displayPanda()
    -- Play the audio
-   -- audio.play(bassBoom)
+   audio.play(bassBoom)
    -- After x miliseconds, return the background to original form
    normalTimer = timer.performWithDelay(300,
       function()
@@ -82,7 +82,7 @@ end
 
 -- "scene:create()"
 function scene:create( event )
-   
+
    sceneGroup = self.view
 
    -- Load the audio tracks
@@ -126,7 +126,10 @@ function scene:create( event )
    tutorial.y = display.contentHeight
 
    -- Animate the scene background
-   blurBackground(background, play)
+   timer.performWithDelay(1000,
+      function()
+         blurBackground(background, play)
+      end, 1)
 
 end
 
@@ -143,7 +146,7 @@ function scene:show( event )
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-      -- audio.play(backingMusic)
+      audio.play(backingMusic)
    end
 end
 
@@ -157,7 +160,7 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
-      play:removeEventListener("touch", startGame)
+      play:removeEventListener("tap", startGame)
       backingMusic = nil
       bassBoom = nil
       sceneGroup = nil

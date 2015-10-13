@@ -1,5 +1,5 @@
 display.setStatusBar( display.HiddenStatusBar )
 
 local composer = require("composer")
-composer.gotoScene( "winning_1" )
+composer.gotoScene( "game_1" )
 

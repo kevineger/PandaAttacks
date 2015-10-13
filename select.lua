@@ -8,6 +8,15 @@ local scene = composer.newScene()
 
 -- local forward references should go here
 
+function goHome(event)
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("start", options)
+end
+
 ---------------------------------------------------------------------------------
 
 -- "scene:create()"
@@ -25,12 +34,12 @@ function scene:create( event )
    background.y = display.contentHeight
 
    -- Select Text
-   play = display.newImageRect(sceneGroup, "assets/images/play.png",800,300)
-   play:scale(0.7, 0.7)
+   play = display.newImageRect(sceneGroup, "assets/images/select.png",1000,677)
+   play:scale(0.5, 0.5)
    play.anchorX = 0.5
    play.anchorY = 1
    play.x = display.contentCenterX
-   play.y = display.contentHeight - 600
+   play.y = 400
 
    -- Adds level one icon
    levelOne = display.newImageRect(sceneGroup, "assets/images/levelOneGrey.png",700,700)
@@ -47,6 +56,14 @@ function scene:create( event )
    levelTwo.anchorY = 1
    levelTwo.x = display.contentCenterX + 150
    levelTwo.y = display.contentHeight - 500
+
+   -- Home Button
+   home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
+   home:scale(0.5, 0.5)
+   home.anchorX = 0.5
+   home.anchorY = 0.5
+   home.x = 100
+   home.y = display.contentHeight - 80
 end
 
 -- "scene:show()"
@@ -57,6 +74,7 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+      home:addEventListener("tap", goHome)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -74,6 +92,8 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
+      home:removeEventListener("tap", goHome)
+      sceneGroup = nil
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
