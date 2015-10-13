@@ -15,6 +15,7 @@ local centerY = display.contentCenterY
 local currScore = 0
 local total = 4
 local lives = 3
+local questionNum = 1
 
 --local r = Math.random(10)
 
@@ -28,7 +29,7 @@ local function clickError( event )
    circle:setStrokeColor(1,0,0)
    circle.anchorX = 0
    circle.anchorY = 0.75
-
+  
    --increase score when correct error is clicked
    if event.target.error == true then
       currScore = currScore + 1
@@ -41,7 +42,9 @@ local function clickError( event )
 
    --all errors have been found
    if currScore == total then
-      display.newText(sceneGroup, "GAME COMPLETED", centerX, display.contentHeight-100, native.systemFont, 60)
+      questionNum = questionNum + 1
+      questionDisplay.text = questionNum
+      display.newText(sceneGroup, "GAME COMPLETED", centerX, display.contentHeight-200, native.systemFont, 60)
 
    elseif lives == 0 then
       --gameOver()
@@ -107,10 +110,29 @@ function scene:create( event )
    background.x = display.contentCenterX
    background.y = display.contentHeight
 
-   local text = display.newText(sceneGroup,"Question", centerX, 200, native.systemFont, 50)
+   local introOptions = {
+   text = "Find the errors in the given code and click on the errors.",
+   x = centerX,
+   y = 200,
+   width = display.contentWidth-100, 
+   height = 120,
+   font = native.systemFont, 
+   fontSize = 50,
+   align = "center"
+   }
 
-   scoreDisplay = display.newText(sceneGroup, currScore, 50, 200, native.systemFont, 50)
-   local totalDisplay = display.newText(sceneGroup,"/"..total, 90, 200, native.systemFont, 50)
+   local introtext = display.newText(introOptions)
+   sceneGroup:insert(introtext)
+
+   circle = display.newCircle(sceneGroup, 50, 50, 30)
+   circle:setFillColor(0,0,0,0)
+   circle.strokeWidth = 3
+   --circle:setStrokeColor(1,0,0)
+   questionDisplay = display.newText(sceneGroup, questionNum, 50, 50, native.systemFont, 50)
+
+
+   scoreDisplay = display.newText(sceneGroup, currScore, display.contentWidth-120, display.contentHeight-100, native.systemFont, 50)
+   local totalDisplay = display.newText(sceneGroup,"/"..total, display.contentWidth-80, display.contentHeight-100, native.systemFont, 50)
 
    heart = {}
 
