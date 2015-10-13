@@ -100,7 +100,7 @@ function scene:show( event )
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
       
-      local introtext_content = "Great job, you made a portal gun and you unlocked the INSERT GAME TITLE. "
+      local introtext_content = "Great job, you have succesfully made a portal gun. "
         .. "Now, continue your misson and stop Panda!"
 
       local introtext_options = {

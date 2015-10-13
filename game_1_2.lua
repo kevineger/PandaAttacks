@@ -53,7 +53,7 @@ function checkAnswers()
       complete = false
       textInput4:setTextColor( 204, 0, 0 )
    end
-   complete = true
+   -- complete = true
    if complete then
       win()
    end
@@ -86,7 +86,7 @@ function win()
             time = 500,
          }
          gg:removeSelf()
-         composer.gotoScene( "select", options )
+         composer.gotoScene( "winning_1", options )
       end, 1)
    submit:removeSelf()
 end
@@ -136,17 +136,16 @@ function scene:show( event )
 
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
-      -- questionTextContent = question_generator.getQuestion(event.params)
-      questionTextContent = question_generator.getQuestion(2)
+      questionTextContent = question_generator.getQuestion(event.params)
       typeWriter(questionText, questionTextContent)
       sceneGroup:insert(questionText)
 
       submit:addEventListener("tap", checkAnswers)
 
       -- Delayed display of text
-      timer.performWithDelay( 1, showText )
+      timer.performWithDelay( 6500, showText )
       -- Delayed display of inputs
-      timer.performWithDelay( 1, showInputs )
+      timer.performWithDelay( 7000, showInputs )
    end
 end
 
