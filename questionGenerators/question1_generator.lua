@@ -14,8 +14,8 @@ end
 
 function Data.getAnswer(a)
 	if ( a==1 ) then
-		-- return "for(int i=0; i<"..pages.."; i++){\n  EvaluatePage(i);\n}"
-		return "Correct answer"
+		return "for(int i=0; i<"..pages.."; i++){\n  EvaluatePage(i);\n}"
+		-- return "Correct answer"
 	elseif ( a==2 ) then
 		return "for(int i=0; i<="..pages.."; i++){\n  EvaluatePage(i);\n}"
 	elseif ( a==3 ) then

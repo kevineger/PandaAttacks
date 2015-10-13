@@ -85,6 +85,21 @@ function flashPanda()
    panda.rotation = 300
 end
 
+-- set typewriter font depending on device
+function setFont()
+   local platform = system.getInfo("platformName")
+    
+    local customFont = native.systemFontBold
+
+    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
+         return "PTMono-Bold"
+    elseif ( platform == "Android") then
+      return "PTMono.ttc"
+    end
+
+    return customFont
+end
+
 -- Update the dialog text
 function updateDialog(dialog, str)
    return function()
@@ -172,6 +187,7 @@ end
 function scene:show( event )
 
    local phase = event.phase
+   typeWriterFont = setFont()
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
@@ -184,7 +200,7 @@ function scene:show( event )
          x = display.contentCenterX,
          y = 300,
          width = display.contentWidth - 100,
-         -- font = "PTMono-Bold",   
+         font = typeWriterFont, 
          fontSize = 45
       }
 
