@@ -50,20 +50,18 @@ function scene:create( event )
    sceneGroup:insert(background)
 
    local sprite_options = {
-      width = 719,
-      height = 576,
-      numFrames = 9
+      width = 420,
+      height = 420,
+      numFrames = 2
    }
 
-   local spriteSheet = graphics.newImageSheet( "assets/images/winning_2.png", sprite_options )
-   local sprite = display.newSprite( spriteSheet, { name="sprite", start=1, count=9, time=1000 } )
+   local spriteSheet = graphics.newImageSheet( "assets/images/winning_1.png", sprite_options )
+   local sprite = display.newSprite( spriteSheet, { name="sprite", start=1, count=2, time=800 } )
    sprite:scale(1.3, 1.3)
    sprite.x = display.contentCenterX
-   sprite.y = display.contentCenterY + 170
+   sprite.y = display.contentCenterY + 150
    sprite:play()
    sceneGroup:insert(sprite)
-
-
 
    continue = display.newImageRect("assets/images/continue.png",431,116)
    continue:scale(0.7, 0.7)
@@ -87,8 +85,8 @@ function scene:show( event )
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
       
-      local introtext_content = "Success! You fixed the portal gun and used it to trap Panda in an "
-          .. "infinte portal loop to trap Panda."
+      local introtext_content = "Great job, you made a portal gun and you unlocked the INSERT GAME TITLE. "
+        .. "Now, continue your misson and stop Panda!"
 
       local introtext_options = {
           text = '',
