@@ -1,6 +1,10 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+-- handle if user gave consent
+local consent = require( "mydata" )
+consent.init()
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -16,7 +20,12 @@ function startGame(event)
        effect = "crossFade",
        time = 400,
    }
-   composer.gotoScene("intro_1", options)
+
+   if (consent.load() == "true") then
+      composer.gotoScene("intro_1", options)
+   else
+      composer.gotoScene("consent", options)
+   end
 end
 
 function blurBackground(bg, p)

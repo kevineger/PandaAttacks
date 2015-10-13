@@ -2,6 +2,10 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+-- handle if user gave consent
+local consent = require( "mydata" )
+consent.init()
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -15,32 +19,24 @@ function goHome(event)
        effect = "crossFade",
        time = 400,
    }
-   composer.gotoScene("home", options)
+   composer.gotoScene("start", options)
 end
 
-function nextScene(event)
+function nextScene()
    local options =
    {
        effect = "crossFade",
        time = 400,
    }
-   composer.gotoScene("select", options)
+   composer.gotoScene("intro_1", options)
 end
 
 ---------------------------------------------------------------------------------
  
-function updateDialog(dialog, str)
-   return function()
-      dialog.text = dialog.text .. str
-    end
-end
-
-function typeWriter(dialog, str)
-   for i = 1, #str do
-       local letter = str:sub(i,i)
-       local step = 50
-       timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
-   end
+function saveConsent()
+  consent.set(true)
+  consent.save()
+  nextScene()
 end
 
 function setFont()
@@ -74,25 +70,35 @@ function scene:create( event )
    background.y = display.contentHeight
    sceneGroup:insert(background)
 
-   local sprite_options = {
-      width = 719,
-      height = 576,
-      numFrames = 9
-   }
+   local introtext_content = "By pressing agree you understand that your playing habits will be stored and analyzed for "
+    .. "educational purposes."
 
-   local spriteSheet = graphics.newImageSheet( "assets/images/winning_2.png", sprite_options )
-   local sprite = display.newSprite( spriteSheet, { name="sprite", start=1, count=9, time=1000 } )
-   sprite:scale(1.3, 1.3)
-   sprite.x = display.contentCenterX
-   sprite.y = display.contentCenterY + 170
-   sprite:play()
-   sceneGroup:insert(sprite)
+    local introtext_options = {
+      text = introtext_content,
+      x = display.contentCenterX,
+      y = 325,
+      width = display.contentWidth - 100,     --required for multi-line and alignment
+      font = typeWriterFont,   
+      fontSize = 40
+    }
 
-   continue = display.newImageRect("assets/images/continue.png",431,116)
-   continue:scale(0.7, 0.7)
-   continue.x = display.contentWidth - 175
-   continue.y = display.contentHeight - 75
-   sceneGroup:insert(continue)
+   introtext = display.newText( introtext_options )
+   sceneGroup:insert(introtext) 
+
+   local title = display.newImageRect("assets/images/consent.png",676,116)
+   title.x = display.contentCenterX
+   title.y = 100
+   sceneGroup:insert(title)
+
+   agree = display.newImageRect("assets/images/agree.png",316,116)
+   agree.x = display.contentCenterX 
+   agree.y = display.contentCenterY - 100
+   sceneGroup:insert(agree)
+
+   disagree = display.newImageRect("assets/images/disagree.png",458,116)
+   disagree.x = display.contentCenterX 
+   disagree.y = display.contentCenterY + 100
+   sceneGroup:insert(disagree)
 
    -- Home Button
    home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
@@ -112,31 +118,15 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
-      continue:addEventListener("tap", nextScene)
+      agree:addEventListener("tap", saveConsent)
       home:addEventListener("tap", goHome)
+      disagree:addEventListener("tap", goHome)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
-      -- Example: start timers, begin animation, play audio, etc.
-      
-      local introtext_content = "Success! You fixed the portal gun and used it to trap Panda in an "
-          .. "infinte portal loop to trap Panda."
+      -- Example: start timers, begin animation, play audio, etc. 
 
-      local introtext_options = {
-          text = '',
-          x = display.contentCenterX,
-          y = 325,
-          width = display.contentWidth - 100,     --required for multi-line and alignment
-          font = typeWriterFont,   
-          fontSize = 40,
-      }
-
-      local introtext = display.newText( introtext_options )
-      typeWriter(introtext, introtext_content)
-      sceneGroup:insert(introtext)  
-
-
-      composer.removeScene("game_2") 
+      composer.removeScene("start") 
    end
 end
 
@@ -150,9 +140,10 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
-      continue:removeEventListener("tap", nextScene)
+      agree:removeEventListener("tap", saveConsent)
       sceneGroup = nil
       home:removeEventListener("tap", goHome)
+      disagree:removeEventListener("tap", goHome)
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
