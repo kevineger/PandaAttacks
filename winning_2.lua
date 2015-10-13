@@ -49,19 +49,21 @@ function scene:create( event )
    background.y = display.contentHeight
    sceneGroup:insert(background)
 
-   local gladys_options = {
-      width = 420,
-      height = 420,
-      numFrames = 3
+   local sprite_options = {
+      width = 719,
+      height = 576,
+      numFrames = 9
    }
 
-   local gladysSheet = graphics.newImageSheet( "assets/images/gladys_sprite.png", gladys_options )
-   local gladys = display.newSprite( gladysSheet, { name="gladys", start=1, count=3, time=1000 } )
-   gladys:scale(1.5, 1.5)
-   gladys.x = 275 
-   gladys.y = display.contentHeight - 350
-   gladys:play()
-   sceneGroup:insert(gladys)
+   local spriteSheet = graphics.newImageSheet( "assets/images/winning_2.png", sprite_options )
+   local sprite = display.newSprite( spriteSheet, { name="sprite", start=1, count=9, time=1000 } )
+   sprite:scale(1.3, 1.3)
+   sprite.x = display.contentCenterX
+   sprite.y = display.contentCenterY + 170
+   sprite:play()
+   sceneGroup:insert(sprite)
+
+
 
    continue = display.newImageRect("assets/images/continue.png",431,116)
    continue:scale(0.7, 0.7)
@@ -84,11 +86,9 @@ function scene:show( event )
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-
-      local introtext_content = "We need you to stop Panda before it's too late! Don't worry you won't have to complete "
-      .."this task alone, you will have Gladys, the world's most powerful AI at your side. Gladys knows a lot but she "
-      .."doesn't know how to defeat Panda. Hmm, a portal gun should do the trick. Help Gladys to improve her abilities "
-      .."by learning to print and use a 3D portal gun. "
+      
+      local introtext_content = "Success! You fixed the portal gun and used it to trap Panda in an "
+          .. "infinte portal loop."
 
       local introtext_options = {
           text = '',
@@ -101,9 +101,10 @@ function scene:show( event )
 
       local introtext = display.newText( introtext_options )
       typeWriter(introtext, introtext_content)
-      sceneGroup:insert(introtext)
-        
-      composer.removeScene("intro_1") 
+      sceneGroup:insert(introtext)  
+
+
+   --composer.removeScene("intro_1") 
    end
 end
 
@@ -118,7 +119,7 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
       continue:removeEventListener("tap", nextScene)
-         sceneGroup = nil
+      sceneGroup = nil
      
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.

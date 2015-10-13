@@ -2,8 +2,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local mydata = require( "mydata" )
-
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -51,25 +49,6 @@ function scene:create( event )
    	background.y = display.contentHeight
 	sceneGroup:insert(background)
 
-	local introtext_content = "Oh no, Panda made his way into our server room! At " 
-		.. "first he seemed to be captivated by the computer system's whirling and beeping, " 
-		.."but it didn't take long for the sounds to anger him. Panda has now begun to rip "
-		.."out the computer cables and hardware."
-
-	local introtext_options = {
-	    text = '',
-	    x = display.contentCenterX,
-	    y = 300,
-	    width = display.contentWidth - 100,     --required for multi-line and alignment
-	    font = "PTMono-Bold",   
-	    fontSize = 45,
-	}
-
-	local introtext = display.newText( introtext_options )
-	typeWriter(introtext, introtext_content)
-
-	sceneGroup:insert(introtext)
-
 	local panada_options = {
 		width = 500,
 		height = 318,
@@ -106,8 +85,27 @@ function scene:show( event )
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-	  
-	composer.removeScene("start")	
+
+		local introtext_content = "Oh no, Panda made his way into our server room! At " 
+			.. "first he seemed to be captivated by the computer system's whirling and beeping, " 
+		.."but it didn't take long for the sounds to anger him. Panda has now begun to rip "
+		.."out the computer cables and hardware."
+
+		local introtext_options = {
+		    text = '',
+		    x = display.contentCenterX,
+		    y = 300,
+		    width = display.contentWidth - 100,     --required for multi-line and alignment
+		    font = "PTMono-Bold",   
+		    fontSize = 45,
+		}
+
+		local introtext = display.newText( introtext_options )
+		typeWriter(introtext, introtext_content)
+
+		sceneGroup:insert(introtext)
+		  
+		composer.removeScene("start")	
 	  
    end
 end
