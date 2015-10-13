@@ -2,8 +2,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local mydata = require( "mydata" )
-
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -27,18 +25,25 @@ function typeWriter(dialog, str)
 	end
 end
 
--- prevent memory loss
-function checkMemory()
-   collectgarbage( "collect" )
-   local memUsage_str = string.format( "MEMORY = %.3f KB", collectgarbage( "count" ) )
-   --print( memUsage_str, "TEXTURE = "..(system.getInfo("textureMemoryUsed") / (1024 * 1024) ) )
+function setFont()
+	local platform = system.getInfo("platformName")
+    
+    local customFont = native.systemFontBold
+
+    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
+      	return "PTMono-Bold"
+    elseif ( platform == "Android") then
+    	return "PTMono.ttc"
+    end
+
+    return customFont
 end
 
 -- "scene:create()"
 function scene:create( event )
-	print "game.lua: create"
+	local sceneGroup = self.view
 
-   	local sceneGroup = self.view
+	typeWriterFont = setFont()
 
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -50,25 +55,6 @@ function scene:create( event )
    	background.x = display.contentCenterX
    	background.y = display.contentHeight
 	sceneGroup:insert(background)
-
-	local introtext_content = "Oh no, Panda made his way into our server room! At " 
-		.. "first he seemed to be captivated by the computer system's whirling and beeping, " 
-		.."but it didn't take long for the sounds to anger him. Panda has now begun to rip "
-		.."out the computer cables and hardware."
-
-	local introtext_options = {
-	    text = '',
-	    x = display.contentCenterX,
-	    y = 300,
-	    width = display.contentWidth - 100,     --required for multi-line and alignment
-	    font = "PTMono-Bold",   
-	    fontSize = 45,
-	}
-
-	local introtext = display.newText( introtext_options )
-	typeWriter(introtext, introtext_content)
-
-	sceneGroup:insert(introtext)
 
 	local panada_options = {
 		width = 500,
@@ -95,19 +81,37 @@ end
 -- "scene:show()"
 function scene:show( event )
 
-	print "game.lua: show"
-
    local sceneGroup = self.view
    local phase = event.phase
 
    if ( phase == "will" ) then
-      -- Called when the scene is still off screen (but is about to come on screen).
+      -- Called when the scene is still off screen (but is about to come on screen)
+  
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-	  
-	composer.removeScene("start")	
+
+		local introtext_content = "Oh no, Panda made his way into our server room! At " 
+			.. "first he seemed to be captivated by the computer system's whirling and beeping, " 
+		.."but it didn't take long for the sounds to anger him. Panda has now begun to rip "
+		.."out the computer cables and hardware."
+
+		local introtext_options = {
+		    text = '',
+		    x = display.contentCenterX,
+		    y = 300,
+		    width = display.contentWidth - 100,     --required for multi-line and alignment
+		    font = typeWriterFont,   
+		    fontSize = 45,
+		}
+
+		local introtext = display.newText( introtext_options )
+		typeWriter(introtext, introtext_content)
+
+		sceneGroup:insert(introtext)
+		  
+		composer.removeScene("start")	
 	  
    end
 end

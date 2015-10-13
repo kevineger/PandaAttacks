@@ -35,12 +35,12 @@ function nextScene(event)
 end
 
 function setFont()
-   local platform = system.getInfo("platformName")
+  local platform = system.getInfo("platformName")
     
     local customFont = native.systemFontBold
 
     if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
-         return "PTMono-Bold"
+        return "PTMono-Bold"
     elseif ( platform == "Android") then
       return "PTMono.ttc"
     end
@@ -51,11 +51,11 @@ end
 -- "scene:create()"
 function scene:create( event )
    local sceneGroup = self.view
-   typeWriterFont = setFont()
-
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
    
+   typeWriterFont = setFont()
+
    local background = display.newImageRect("assets/images/splashBg.jpg",900,1425)
    background.anchorX = 0.5
    background.anchorY = 1
@@ -64,19 +64,19 @@ function scene:create( event )
    background.y = display.contentHeight
    sceneGroup:insert(background)
 
-   local gladys_options = {
+   local sprite_options = {
       width = 420,
       height = 420,
-      numFrames = 3
+      numFrames = 2
    }
 
-   local gladysSheet = graphics.newImageSheet( "assets/images/gladys_sprite.png", gladys_options )
-   local gladys = display.newSprite( gladysSheet, { name="gladys", start=1, count=3, time=1000 } )
-   gladys:scale(1.5, 1.5)
-   gladys.x = 275 
-   gladys.y = display.contentHeight - 350
-   gladys:play()
-   sceneGroup:insert(gladys)
+   local spriteSheet = graphics.newImageSheet( "assets/images/winning_1.png", sprite_options )
+   local sprite = display.newSprite( spriteSheet, { name="sprite", start=1, count=2, time=800 } )
+   sprite:scale(1.3, 1.3)
+   sprite.x = display.contentCenterX
+   sprite.y = display.contentCenterY + 150
+   sprite:play()
+   sceneGroup:insert(sprite)
 
    continue = display.newImageRect("assets/images/continue.png",431,116)
    continue:scale(0.7, 0.7)
@@ -99,11 +99,9 @@ function scene:show( event )
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-
-      local introtext_content = "We need you to stop Panda before it's too late! Don't worry you won't have to complete "
-      .."this task alone, you will have Gladys, the world's most powerful AI at your side. Gladys knows a lot but she "
-      .."doesn't know how to defeat Panda. Hmm, a portal gun should do the trick. Help Gladys to improve her abilities "
-      .."by learning to print and use a 3D portal gun. "
+      
+      local introtext_content = "Great job, you made a portal gun and you unlocked the INSERT GAME TITLE. "
+        .. "Now, continue your misson and stop Panda!"
 
       local introtext_options = {
           text = '',
@@ -117,8 +115,9 @@ function scene:show( event )
       local introtext = display.newText( introtext_options )
       typeWriter(introtext, introtext_content)
       sceneGroup:insert(introtext)  
-        
-      composer.removeScene("intro_1") 
+
+
+   --composer.removeScene("intro_1") 
    end
 end
 
@@ -133,7 +132,7 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
       continue:removeEventListener("tap", nextScene)
-         sceneGroup = nil
+      sceneGroup = nil
      
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
