@@ -74,10 +74,10 @@ function scene:create( event )
 	}
 
 	local text = loadWords(introtext_content)
-	local introtext = display.newText( introtext_options )
+	-- local introtext = display.newText( introtext_options )
 
-	displayWords(introtext, text)
-	sceneGroup:insert(introtext)
+	-- displayWords(introtext, text)
+	-- sceneGroup:insert(introtext)
 
 	panada_options = {
 		-- Required params

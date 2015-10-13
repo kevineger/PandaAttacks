@@ -1,5 +1,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
+local question = require("questions")
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -11,22 +12,101 @@ local scene = composer.newScene()
 ---------------------------------------------------------------------------------
 local centerX = display.contentCenterX
 local centerY = display.contentCenterY
+local currScore = 0
+local total = 4
+
+--local r = Math.random(10)
+
+--circles word when clicked
+local function clickError( event )
+
+   circle = display.newCircle(sceneGroup, event.target.x, event.target.y, event.target.width/2)
+   circle:setFillColor(0,0,0,0)
+   circle.strokeWidth = 3
+   circle:setStrokeColor(1,0,0)
+   circle.anchorX = 0
+   circle.anchorY = 0.75
+
+   --increase score when correct error is clicked
+   if event.target.error == true then
+      currScore = currScore + 1
+      scoreDisplay.text = currScore
+   end
+
+
+   --
+end
+
+--sets a string to separate clickable objects
+local function setStringObject()
+
+   s = errorCode[2].questionString
+
+   clickableString = {}
+
+   local t = {}
+   local x = centerX-200
+   local y = centerY-100
+
+
+   i=1
+   for str in string.gmatch(s, "([^%s]+)") do
+
+      -- increase y when special character /n is found
+      if str == string.gmatch(s, "([^%c]+)") then
+         y = y +30
+      end
+
+      clickableString[i] = display.newText(str, x, y, native.systemFont, 50)
+      clickableString[i].anchorX = 0
+      clickableString[i].anchorY = 1
+      clickableString[i].word = str
+      clickableString[i].error = false
+      clickableString[i]:addEventListener("tap", clickError)
+
+      --x position depends on the question before
+      x = clickableString[i].x + (string.len(str)*25)
+
+      i = i + 1
+
+   end
+
+   --sets which objects are errors
+   for i = 1, #clickableString do
+      for j =1, #errorCode[2].error do
+         if clickableString[i].word == errorCode[2].error[j] then 
+            clickableString[i].error = true
+            break
+         end
+      end
+   end
+
+end
+
+
 -- "scene:create()"
 function scene:create( event )
 
-   local sceneGroup = self.view
-   background = display.newImageRect("assets/images/splashBg.jpg",900,1425)
+   sceneGroup = self.view
+
+   background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
    background.anchorX = 0.5
    background.anchorY = 1
    -- Place background image in center of screen
    background.x = display.contentCenterX
    background.y = display.contentHeight
 
-   --local text = display.newText(sceneGroup, "fnisdhfdihfdviudff", centerX, centerY)
+   local text = display.newText(sceneGroup,"Question", centerX, 200, native.systemFont, 50)
 
-   -- Initialize the scene here.
-   -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+   scoreDisplay = display.newText(sceneGroup, currScore, 50, 200, native.systemFont, 50)
+   local totalDisplay = display.newText(sceneGroup,"/"..total, 90, 200, native.systemFont, 50)
+
+   setStringObject()
+   
+
+
 end
+
 
 -- "scene:show()"
 function scene:show( event )
