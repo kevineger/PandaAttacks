@@ -28,6 +28,16 @@ function startGame(event)
    end
 end
 
+function viewCredits(event)
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   
+   composer.gotoScene("credit", options)
+end
+
 function blurBackground(bg, p)
    -- Blur the background
    bg.fill.effect = "filter.blurVertical"
@@ -127,12 +137,12 @@ function scene:create( event )
    tutorial.x = display.contentCenterX - 200
    tutorial.y = display.contentHeight
 
-   tutorial = display.newImageRect(sceneGroup, "assets/images/credits.png",1300,500)
-   tutorial:scale(0.3, 0.3)
-   tutorial.anchorX = 0.5
-   tutorial.anchorY = 1
-   tutorial.x = display.contentCenterX + 200
-   tutorial.y = display.contentHeight
+   credits = display.newImageRect(sceneGroup, "assets/images/credits.png",1300,500)
+   credits:scale(0.3, 0.3)
+   credits.anchorX = 0.5
+   credits.anchorY = 1
+   credits.x = display.contentCenterX + 200
+   credits.y = display.contentHeight
 
    -- Animate the scene background
    timer.performWithDelay(1000,
@@ -151,6 +161,7 @@ function scene:show( event )
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
       play:addEventListener("tap", startGame)
+      credits:addEventListener("tap", viewCredits)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -170,6 +181,7 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
       play:removeEventListener("tap", startGame)
+      credits:removeEventListener("tap", viewCredits)
       backingMusic = nil
       bassBoom = nil
       sceneGroup = nil
