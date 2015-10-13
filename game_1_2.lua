@@ -143,9 +143,9 @@ function scene:show( event )
       submit:addEventListener("tap", checkAnswers)
 
       -- Delayed display of text
-      timer.performWithDelay( 6500, showText )
+      timer.performWithDelay( 1, showText )
       -- Delayed display of inputs
-      timer.performWithDelay( 7000, showInputs )
+      timer.performWithDelay( 1, showInputs )
    end
 end
 
@@ -153,55 +153,55 @@ function showText()
    local loopText1Options = {
          text = 'for(',
          x = display.contentCenterX-300,
-         y = 500, 
+         y = display.contentCenterY-140, 
          fontSize = 40
       }
    local loopText2Options = {
          text = '=0; i<pages.',
          x = display.contentCenterX-60,
-         y = 500,
+         y = display.contentCenterY-140,
          fontSize = 40
       }
    local loopText3Options = {
          text = '; i++){',
          x = display.contentCenterX+220,
-         y = 500,
+         y = display.contentCenterY-140,
          fontSize = 40
    }
    local loopText4Options = {
          text = 'sentences = pages[i].getSentences();',
          x = display.contentCenterX+15,
-         y = 550,
+         y = display.contentCenterY-90,
          fontSize = 40
    }
    local loopText5Options = {
          text = 'for(int k=0; k<sentences.length();',
          x = display.contentCenterX-20,
-         y = 550+50,
+         y = display.contentCenterY-40,
          fontSize = 40
    }
    local loopText6Options = {
          text = 'transferSentence(sentences[',
          x = display.contentCenterX-40,
-         y = 600+50,
+         y = display.contentCenterY+10,
          fontSize = 40
    }
    local loopText7Options = {
          text = ']);',
          x = display.contentCenterX+272,
-         y = 600+50,
+         y = display.contentCenterY+10,
          fontSize = 40
    }
    local loopText8Options = {
          text = '}',
          x = display.contentCenterX-300,
-         y = 700,
+         y = display.contentCenterY+60,
          fontSize = 40
    }
    local loopText9Options = {
          text = '}',
          x = display.contentCenterX-315,
-         y = 750,
+         y = display.contentCenterY+110,
          fontSize = 40
    }
    loopText1 = display.newText( loopText1Options )
