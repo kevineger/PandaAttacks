@@ -14,11 +14,13 @@ local centerX = display.contentCenterX
 local centerY = display.contentCenterY
 local currScore = 0
 local total = 4
+local lives = 3
 
 --local r = Math.random(10)
 
 --circles word when clicked
 local function clickError( event )
+
 
    circle = display.newCircle(sceneGroup, event.target.x, event.target.y, event.target.width/2)
    circle:setFillColor(0,0,0,0)
@@ -31,16 +33,23 @@ local function clickError( event )
    if event.target.error == true then
       currScore = currScore + 1
       scoreDisplay.text = currScore
+
+   else
+      heart[lives]:removeSelf()
+      lives = lives-1
    end
 
    --all errors have been found
    if currScore == total then
       display.newText(sceneGroup, "GAME COMPLETED", centerX, display.contentHeight-100, native.systemFont, 60)
+
+   elseif lives == 0 then
+      --gameOver()
    end
 end
 
 --sets a string to separate clickable objects
-local function setStringObject()
+local function setQuestion()
 
    s = errorCode[2].questionString
 
@@ -103,7 +112,16 @@ function scene:create( event )
    scoreDisplay = display.newText(sceneGroup, currScore, 50, 200, native.systemFont, 50)
    local totalDisplay = display.newText(sceneGroup,"/"..total, 90, 200, native.systemFont, 50)
 
-   setStringObject()
+   heart = {}
+
+   local x = 100
+   for i = 1, 3 do
+      heart[i] = display.newImage(sceneGroup, "assets/images/life.png", x, display.contentHeight-100)
+      heart[i]:scale(2,2)
+      x = x + 100
+   end
+
+   
    
 end
 
@@ -116,6 +134,8 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+      setQuestion()
+
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
