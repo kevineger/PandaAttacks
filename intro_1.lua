@@ -25,18 +25,25 @@ function typeWriter(dialog, str)
 	end
 end
 
--- prevent memory loss
-function checkMemory()
-   collectgarbage( "collect" )
-   local memUsage_str = string.format( "MEMORY = %.3f KB", collectgarbage( "count" ) )
-   --print( memUsage_str, "TEXTURE = "..(system.getInfo("textureMemoryUsed") / (1024 * 1024) ) )
+function setFont()
+	local platform = system.getInfo("platformName")
+    
+    local customFont = native.systemFontBold
+
+    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
+      	return "PTMono-Bold"
+    elseif ( platform == "Android") then
+    	return "PTMono.ttc"
+    end
+
+    return customFont
 end
 
 -- "scene:create()"
 function scene:create( event )
-	print "game.lua: create"
+	local sceneGroup = self.view
 
-   	local sceneGroup = self.view
+	typeWriterFont = setFont()
 
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -74,13 +81,12 @@ end
 -- "scene:show()"
 function scene:show( event )
 
-	print "game.lua: show"
-
    local sceneGroup = self.view
    local phase = event.phase
 
    if ( phase == "will" ) then
-      -- Called when the scene is still off screen (but is about to come on screen).
+      -- Called when the scene is still off screen (but is about to come on screen)
+  
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -96,7 +102,7 @@ function scene:show( event )
 		    x = display.contentCenterX,
 		    y = 300,
 		    width = display.contentWidth - 100,     --required for multi-line and alignment
-		    font = "PTMono-Bold",   
+		    font = typeWriterFont,   
 		    fontSize = 45,
 		}
 

@@ -34,9 +34,25 @@ function nextScene(event)
    composer.gotoScene("select", options)
 end
 
+function setFont()
+  local platform = system.getInfo("platformName")
+    
+    local customFont = native.systemFontBold
+
+    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
+        return "PTMono-Bold"
+    elseif ( platform == "Android") then
+      return "PTMono.ttc"
+    end
+
+    return customFont
+end
+
 -- "scene:create()"
 function scene:create( event )
    local sceneGroup = self.view
+
+   typeWriterFont = setFont()
 
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -95,7 +111,7 @@ function scene:show( event )
           x = display.contentCenterX,
           y = 325,
           width = display.contentWidth - 100,     --required for multi-line and alignment
-          font = "PTMono-Bold",   
+          font = typeWriterFont,   
           fontSize = 40,
       }
 
