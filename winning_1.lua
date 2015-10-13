@@ -8,6 +8,23 @@ local scene = composer.newScene()
 ---------------------------------------------------------------------------------
 
 -- local forward references should go here
+function goHome(event)
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("start", options)
+end
+
+function nextScene(event)
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("select", options)
+end
 
 ---------------------------------------------------------------------------------
  
@@ -23,15 +40,6 @@ function typeWriter(dialog, str)
        local step = 50
        timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
    end
-end
-
-function nextScene(event)
-   local options =
-   {
-       effect = "crossFade",
-       time = 400,
-   }
-   composer.gotoScene("select", options)
 end
 
 function setFont()
@@ -84,6 +92,15 @@ function scene:create( event )
    continue.y = display.contentHeight - 75
    sceneGroup:insert(continue)
 
+   -- Home Button
+   home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
+   home:scale(0.5, 0.5)
+   home.anchorX = 0.5
+   home.anchorY = 0.5
+   home.x = 100
+   home.y = display.contentHeight - 80
+   sceneGroup:insert(home)
+
 end
 
 -- "scene:show()"
@@ -95,6 +112,7 @@ function scene:show( event )
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
       continue:addEventListener("tap", nextScene)
+      home:addEventListener("tap", goHome)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -117,7 +135,7 @@ function scene:show( event )
       sceneGroup:insert(introtext)  
 
 
-   --composer.removeScene("intro_1") 
+   composer.removeScene("game_1") 
    end
 end
 
@@ -133,7 +151,7 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
       continue:removeEventListener("tap", nextScene)
       sceneGroup = nil
-     
+      home:removeEventListener("tap", goHome)     
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
