@@ -33,8 +33,10 @@ local function clickError( event )
       scoreDisplay.text = currScore
    end
 
-
-   --
+   --all errors have been found
+   if currScore == total then
+      display.newText(sceneGroup, "GAME COMPLETED", centerX, display.contentHeight-100, native.systemFont, 60)
+   end
 end
 
 --sets a string to separate clickable objects
@@ -53,9 +55,9 @@ local function setStringObject()
    for str in string.gmatch(s, "([^%s]+)") do
 
       -- increase y when special character /n is found
-      if str == string.gmatch(s, "([^%c]+)") then
-         y = y +30
-      end
+      -- if str == string.gmatch(s, "([^%c]+)") then
+      --    y = y +30
+      -- end
 
       clickableString[i] = display.newText(str, x, y, native.systemFont, 50)
       clickableString[i].anchorX = 0
@@ -103,8 +105,6 @@ function scene:create( event )
 
    setStringObject()
    
-
-
 end
 
 
