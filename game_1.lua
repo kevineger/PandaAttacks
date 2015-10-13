@@ -21,7 +21,12 @@ function nextLevel(event)
    winTimer = timer.performWithDelay(3000,
       function()
          ans[1]:removeSelf()
-         composer.gotoScene("select")
+         local options = {
+            effect = "fade",
+            time = 500,
+            params = { pages=question_generator.getNumPages() }
+         }
+         composer.gotoScene( "game_1_2", options )
       end, 1)
 end
 

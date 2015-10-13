@@ -1,12 +1,15 @@
 local Data={} 
 
 local pages = math.random(10,100)
-local instructions = math.random(3, pages) 
 
 function Data.getQuestion(q)
 	if ( q == 0 ) then
 		return "Help Gladys loop through " .. pages .. " pages of results."
 	end
+end
+
+function Data.getNumPages()
+	return pages
 end
 
 function Data.getAnswer(a)
