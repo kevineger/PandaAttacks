@@ -9,12 +9,30 @@ local scene = composer.newScene()
 
 -- local forward references should go here
 
+function goHome(event)
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("start", options)
+end
+
+function nextScene(event)
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("intro_2", options)
+end
+
 ---------------------------------------------------------------------------------
  
 function updateDialog(dialog, str)
 	return function()
 		dialog.text = dialog.text .. str
-    end
+  end
 end
 
 function typeWriter(dialog, str)
@@ -65,16 +83,25 @@ function scene:create( event )
 	local pandaSheet = graphics.newImageSheet( "assets/images/panda_sprite.png", panada_options )
 	local panda = display.newSprite( pandaSheet, { name="panda", start=1, count=4, time=1000 } )
 	panda:scale(1.2, 1.2)
-	panda.x = 300 
+	panda.x = display.contentCenterX 
 	panda.y = display.contentHeight - 275
 	panda:play()
 	sceneGroup:insert(panda)
 
-	local continue = display.newImageRect("assets/images/continue.png",431,116)
-	continue:scale(0.7, 0.7)
-   	continue.x = display.contentWidth - 175
-   	continue.y = display.contentHeight - 75
-   	sceneGroup:insert(continue)
+	continue = display.newImageRect("assets/images/continue.png",431,116)
+  continue:scale(0.7, 0.7)
+  continue.x = display.contentWidth - 175
+  continue.y = display.contentHeight - 75
+  sceneGroup:insert(continue)
+
+   	-- Home Button
+   home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
+   home:scale(0.5, 0.5)
+   home.anchorX = 0.5
+   home.anchorY = 0.5
+   home.x = 100
+   home.y = display.contentHeight - 80
+   sceneGroup:insert(home)
 
 end
 
@@ -86,7 +113,8 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen)
-  
+  		continue:addEventListener("tap", nextScene)
+  		home:addEventListener("tap", goHome)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -106,9 +134,8 @@ function scene:show( event )
 		    fontSize = 45,
 		}
 
-		local introtext = display.newText( introtext_options )
+		introtext = display.newText( introtext_options )
 		typeWriter(introtext, introtext_content)
-
 		sceneGroup:insert(introtext)
 		  
 		composer.removeScene("start")	
@@ -130,10 +157,13 @@ function scene:hide( event )
 	--Runtime:removeEventListener("enterFrame", platform)
 	--timer.cancel(addColumnTimer)
 	--timer.cancel(moveColumnTimer)
-	  
+	  continue:removeEventListener("tap", nextScene)
+    home:removeEventListener("tap", goHome)
+    sceneGroup = nil
 	  
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
+      if introtext then introtext:removeSelf() end
    end
 end
 

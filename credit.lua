@@ -1,4 +1,3 @@
-
 local composer = require( "composer" )
 local scene = composer.newScene()
 
@@ -9,7 +8,6 @@ local scene = composer.newScene()
 
 -- local forward references should go here
 
--- local forward references should go here
 function goHome(event)
    local options =
    {
@@ -19,38 +17,14 @@ function goHome(event)
    composer.gotoScene("start", options)
 end
 
-function nextScene(event)
-   local options =
-   {
-       effect = "crossFade",
-       time = 400,
-   }
-   composer.gotoScene("select", options)
-end
-
 ---------------------------------------------------------------------------------
- 
-function updateDialog(dialog, str)
-   return function()
-      dialog.text = dialog.text .. str
-    end
-end
-
-function typeWriter(dialog, str)
-   for i = 1, #str do
-       local letter = str:sub(i,i)
-       local step = 50
-       timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
-   end
-end
-
 function setFont()
-  local platform = system.getInfo("platformName")
+   local platform = system.getInfo("platformName")
     
     local customFont = native.systemFontBold
 
     if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
-        return "PTMono-Bold"
+         return "PTMono-Bold"
     elseif ( platform == "Android") then
       return "PTMono.ttc"
     end
@@ -58,16 +32,16 @@ function setFont()
     return customFont
 end
 
+
 -- "scene:create()"
 function scene:create( event )
+
    local sceneGroup = self.view
 
-   typeWriterFont = setFont()
-
    -- Initialize the scene here.
-   -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-   
-   local background = display.newImageRect("assets/images/splashBg.jpg",900,1425)
+   typeWriterFont = setFont()
+   -- Set the background
+   local background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
    background.anchorX = 0.5
    background.anchorY = 1
    -- Place background image in center of screen
@@ -75,34 +49,19 @@ function scene:create( event )
    background.y = display.contentHeight
    sceneGroup:insert(background)
 
-   local sprite_options = {
-      width = 719,
-      height = 576,
-      numFrames = 9
-   }
-
-   local spriteSheet = graphics.newImageSheet( "assets/images/winning_2.png", sprite_options )
-   local sprite = display.newSprite( spriteSheet, { name="sprite", start=1, count=9, time=1000 } )
-   sprite:scale(1.3, 1.3)
-   sprite.x = display.contentCenterX
-   sprite.y = display.contentCenterY + 170
-   sprite:play()
-   sceneGroup:insert(sprite)
-
-   continue = display.newImageRect("assets/images/continue.png",431,116)
-   continue:scale(0.7, 0.7)
-   continue.x = display.contentWidth - 175
-   continue.y = display.contentHeight - 75
-   sceneGroup:insert(continue)
+   -- Title Text
+   local title = display.newImageRect(sceneGroup, "assets/images/credits_title.png",519,356)
+   title.x = display.contentCenterX
+   title.y = 200
+   sceneGroup:insert(title)
 
    -- Home Button
    home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
    home:scale(0.5, 0.5)
-   home.anchorX = 0.5
-   home.anchorY = 0.5
    home.x = 100
-   home.y = display.contentHeight - 80
+   home.y = 150
    sceneGroup:insert(home)
+
 end
 
 -- "scene:show()"
@@ -113,31 +72,35 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
-      continue:addEventListener("tap", nextScene)
       home:addEventListener("tap", goHome)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-      
-      local introtext_content = "Success! You fixed the portal gun and used it to trap Panda in an "
-          .. "infinte portal loop to trap Panda."
 
-      local introtext_options = {
-          text = '',
+      local text_content = "Background Image: https://pixabay.com/en/room-background-dark-shadow-wall-315257/"
+      	.. "\n\nNumber 1: https://thenounproject.com/search/?q=number%20one&i=60413"
+      	.. "\n\nNumber 2: https://thenounproject.com/search/?q=number+two&i=61038"
+      	.. "\n\nDrum Audio: https://www.freesound.org/people/Taira%20Komori/sounds/213324/"
+      	.. "\n\nSoundtrack: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100640"
+      	.. "\n\nPanda: http://vector.me/browse/330110/panda02"
+      	.. "\n\nComputers: http://vector.me/browse/129833/web_virtualization_server_clip_art"
+      	.. "\n\nElectric Spark: http://vector.me/browse/105213/electric_spark_clip_art"
+      	.. "\n\nGladys: http://vector.me/browse/193991/robot_carrying_things_clip_art"
+      	.. "\n\nPortal: http://vector.me/browse/426498/whirlpool"
+      	.. "\n\nPortal Gun: http://vector.me/browse/690762/futuristic_gun"
+
+      local text_options = {
+          text = text_content,
           x = display.contentCenterX,
-          y = 325,
+          y = 900,
           width = display.contentWidth - 100,     --required for multi-line and alignment
           font = typeWriterFont,   
           fontSize = 40,
       }
 
-      local introtext = display.newText( introtext_options )
-      typeWriter(introtext, introtext_content)
-      sceneGroup:insert(introtext)  
-
-
-      composer.removeScene("game_2") 
+      local introtext = display.newText( text_options )
+      sceneGroup:insert(introtext)
    end
 end
 
@@ -151,9 +114,8 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
-      continue:removeEventListener("tap", nextScene)
-      sceneGroup = nil
       home:removeEventListener("tap", goHome)
+      sceneGroup = nil
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
