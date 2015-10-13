@@ -1,5 +1,5 @@
 display.setStatusBar( display.HiddenStatusBar )
 
 local composer = require("composer")
-composer.gotoScene( "finderrors" )
 
+composer.gotoScene( "game_1_2" )
