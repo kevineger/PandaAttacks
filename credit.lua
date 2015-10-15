@@ -1,6 +1,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
-
+local widget = require( "widget" )
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -32,7 +32,6 @@ function setFont()
     return customFont
 end
 
-
 -- "scene:create()"
 function scene:create( event )
 
@@ -61,6 +60,26 @@ function scene:create( event )
    home.x = 100
    home.y = 150
    sceneGroup:insert(home)
+
+   -- Create the widget
+  scrollView = widget.newScrollView
+  {
+      x = display.contentCenterX,
+      y = display.contentCenterY+150,
+      width = display.contentWidth - 100,
+      height = display.contentHeight/2,
+      horizontalScrollDisabled = true,
+      -- scrollWidth = display.contentWidth - 100,
+      -- scrollHeight = 10,
+      listener = scrollListener
+  }
+  sceneGroup:insert(scrollView)
+
+  local border = display.newRoundedRect(sceneGroup, display.contentCenterX, display.contentCenterY+150, display.contentWidth - 100, display.contentHeight/2, 10 )
+  border:setFillColor(0, 0, 0, 0)
+  border.strokeWidth = 10
+  border:setStrokeColor(0.5)
+
 
 end
 
@@ -92,15 +111,18 @@ function scene:show( event )
 
       local text_options = {
           text = text_content,
-          x = display.contentCenterX,
-          y = 900,
-          width = display.contentWidth - 100,     --required for multi-line and alignment
+          x = 20,
+          y = 20,
+          width = display.contentWidth - 150,     --required for multi-line and alignment
           font = typeWriterFont,   
-          fontSize = 40,
+          fontSize = 28
       }
 
       local introtext = display.newText( text_options )
-      sceneGroup:insert(introtext)
+      introtext.anchorX = 0
+      introtext.anchorY = 0
+      introtext:setFillColor(0)
+      scrollView:insert(introtext)
    end
 end
 
