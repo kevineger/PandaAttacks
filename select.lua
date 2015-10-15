@@ -17,6 +17,24 @@ function goHome(event)
    composer.gotoScene("start", options)
 end
 
+function goToGameOne(event)
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("game_1", options)
+end
+
+function goToGameTwo(event)
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("finderrors", options)
+end
+
 ---------------------------------------------------------------------------------
 
 -- "scene:create()"
@@ -50,7 +68,7 @@ function scene:create( event )
    levelOne.y = display.contentHeight - 500
 
    -- Adds level two icon
-   levelTwo = display.newImageRect(sceneGroup, "assets/images/levelTwo.png",700,700)
+   levelTwo = display.newImageRect(sceneGroup, "assets/images/levelTwoGrey.png",700,700)
    levelTwo:scale(0.5, 0.5)
    levelTwo.anchorX = 0.5
    levelTwo.anchorY = 1
@@ -74,6 +92,8 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+      levelOne:addEventListener("tap", goToGameOne)
+      levelTwo:addEventListener("tap", goToGameTwo)
       home:addEventListener("tap", goHome)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
@@ -93,6 +113,8 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
       home:removeEventListener("tap", goHome)
+      levelOne:removeEventListener("tap", goToGameOne)
+      levelTwo:removeEventListener("tap", goToGameTwo)
       sceneGroup = nil
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
