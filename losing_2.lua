@@ -18,53 +18,25 @@ function goHome(event)
        effect = "crossFade",
        time = 400,
    }
-   composer.gotoScene("home", options)
+   composer.gotoScene("start", options)
 end
 
-function nextScene(event)
+function playAgain(event)
    local options =
    {
        effect = "crossFade",
        time = 400,
    }
-   composer.gotoScene("select", options)
+   composer.gotoScene("finderrors", options)
 end
 
 ---------------------------------------------------------------------------------
- 
-function updateDialog(dialog, str)
-   return function()
-      dialog.text = dialog.text .. str
-    end
-end
-
-function typeWriter(dialog, str)
-   for i = 1, #str do
-       local letter = str:sub(i,i)
-       local step = 50
-       timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
-   end
-end
-
-function setFont()
-  local platform = system.getInfo("platformName")
-    
-    local customFont = native.systemFontBold
-
-    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
-        return "PTMono-Bold"
-    elseif ( platform == "Android") then
-      return "PTMono.ttc"
-    end
-
-    return customFont
-end
+local centerX = display.contentCenterX
+local centerY = display.contentCenterY
 
 -- "scene:create()"
 function scene:create( event )
    local sceneGroup = self.view
-
-   typeWriterFont = setFont()
 
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -77,25 +49,13 @@ function scene:create( event )
    background.y = display.contentHeight
    sceneGroup:insert(background)
 
-   local sprite_options = {
-      width = 719,
-      height = 576,
-      numFrames = 9
-   }
+   local title = display.newText(sceneGroup, "Unsuccessful", centerX, 150, native.systemFontBold, 70)
 
-   local spriteSheet = graphics.newImageSheet( "assets/images/winning_2.png", sprite_options )
-   local sprite = display.newSprite( spriteSheet, { name="sprite", start=1, count=9, time=1000 } )
-   sprite:scale(1.3, 1.3)
-   sprite.x = display.contentCenterX
-   sprite.y = display.contentCenterY + 170
-   sprite:play()
-   sceneGroup:insert(sprite)
+   local tryAgain = display.newImage(sceneGroup, "assets/images/tryAgain.png", centerX, centerY+100)
+   tryAgain:scale(1.5, 1.5)
+   tryAgain:addEventListener("tap", playAgain)
 
-   continue = display.newImageRect("assets/images/continue.png",431,116)
-   continue:scale(0.7, 0.7)
-   continue.x = display.contentWidth - 175
-   continue.y = display.contentHeight - 75
-   sceneGroup:insert(continue)
+   local sadFace = display.newImage(sceneGroup, "assets/images/sad.png", centerX, centerY-200)
 
    -- Home Button
    home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
@@ -115,31 +75,11 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
-      continue:addEventListener("tap", nextScene)
       home:addEventListener("tap", goHome)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-      
-      local introtext_content = "Success! You fixed the portal gun and used it to trap Panda in an "
-          .. "infinte portal loop to trap Panda."
-
-      local introtext_options = {
-          text = '',
-          x = display.contentCenterX,
-          y = 325,
-          width = display.contentWidth - 100,     --required for multi-line and alignment
-          font = typeWriterFont,   
-          fontSize = 40,
-      }
-
-      local introtext = display.newText( introtext_options )
-      typeWriter(introtext, introtext_content)
-      sceneGroup:insert(introtext)  
-
-
-      composer.removeScene("game_2") 
    end
 end
 
@@ -153,9 +93,7 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
-      continue:removeEventListener("tap", nextScene)
-      sceneGroup = nil
-      home:removeEventListener("tap", goHome)
+    
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
