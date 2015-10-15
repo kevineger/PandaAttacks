@@ -91,12 +91,28 @@ function win()
    submit:removeSelf()
 end
 
+-- set typewrite font depending on device
+function setFont()
+   local platform = system.getInfo("platformName")
+    
+    local customFont = native.systemFontBold
+
+    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
+         return "PTMono-Bold"
+    elseif ( platform == "Android") then
+      return "PTMono.ttc"
+    end
+
+    return customFont
+end
+
 ---------------------------------------------------------------------------------
 
 -- "scene:create()"
 function scene:create( event )
 
    local sceneGroup = self.view
+   typeWriterFont = setFont()
 
    -- Set the background
    background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
@@ -129,7 +145,7 @@ function scene:show( event )
          x = display.contentCenterX,
          y = 300,
          width = display.contentWidth - 150,
-         -- font = "PTMono-Bold",   
+         font = typeWriterFont,   
          fontSize = 45
       }
       questionText = display.newText( questionOptions )
