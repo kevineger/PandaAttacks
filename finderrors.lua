@@ -23,12 +23,12 @@ local questionNum = 1
 local function clickError( event )
 
 
-   circle = display.newCircle(sceneGroup, event.target.x, event.target.y, event.target.width/2)
-   circle:setFillColor(0,0,0,0)
-   circle.strokeWidth = 3
-   circle:setStrokeColor(1,0,0)
-   circle.anchorX = 0
-   circle.anchorY = 0.75
+   circleSelect = display.newRoundedRect(sceneGroup, event.target.x, event.target.y, event.target.width, event.target.height, 3)
+   circleSelect:setFillColor(0,0,0,0)
+   circleSelect.strokeWidth = 3
+   circleSelect:setStrokeColor(1,0,0)
+   circleSelect.anchorX = 0
+   circleSelect.anchorY = 1
   
    --increase score when correct error is clicked
    if event.target.error == true then
@@ -59,7 +59,7 @@ local function setQuestion()
    clickableString = {}
 
    local t = {}
-   local x = centerX-200
+   local x = centerX-300
    local y = centerY-100
 
 
@@ -70,19 +70,27 @@ local function setQuestion()
       -- if str == string.gmatch(s, "([^%c]+)") then
       --    y = y +30
       -- end
+      if str == "%n" then
+         y = y + 40
+         x = centerX-300
 
-      clickableString[i] = display.newText(str, x, y, native.systemFont, 50)
-      clickableString[i].anchorX = 0
-      clickableString[i].anchorY = 1
-      clickableString[i].word = str
-      clickableString[i].error = false
-      clickableString[i]:addEventListener("tap", clickError)
+      elseif str == "%t" then
+         x = x + 40
+      else
 
-      --x position depends on the question before
-      x = clickableString[i].x + (string.len(str)*25)
+         clickableString[i] = display.newText(str, x, y, native.systemFont, 40)
+         clickableString[i].anchorX = 0
+         clickableString[i].anchorY = 1
+         clickableString[i].word = str
+         clickableString[i].error = false
+         clickableString[i]:addEventListener("tap", clickError)
 
-      i = i + 1
 
+         --x position depends on the question before
+         x = clickableString[i].x + (string.len(str)*25)
+
+         i = i + 1
+      end
    end
 
    --sets which objects are errors
@@ -124,11 +132,11 @@ function scene:create( event )
    local introtext = display.newText(introOptions)
    sceneGroup:insert(introtext)
 
-   circle = display.newCircle(sceneGroup, 50, 50, 30)
+   circle = display.newCircle(sceneGroup, 75, 75, 30)
    circle:setFillColor(0,0,0,0)
    circle.strokeWidth = 3
-   --circle:setStrokeColor(1,0,0)
-   questionDisplay = display.newText(sceneGroup, questionNum, 50, 50, native.systemFont, 50)
+
+   questionDisplay = display.newText(sceneGroup, questionNum, 75, 75, native.systemFont, 50)
 
 
    scoreDisplay = display.newText(sceneGroup, currScore, display.contentWidth-120, display.contentHeight-100, native.systemFont, 50)

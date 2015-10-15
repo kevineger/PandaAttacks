@@ -7,7 +7,7 @@ a1.questionString = "class ForDemo {\n\tpublic static void main(String[] args){\
 a1.error = {"for", "int" }
 
 a2 = {}
-a2.questionString = "class Test {\n\t int x = 0; "
+a2.questionString = "class Test { %n %t int x = 0; "
 a2.error = {"class", "Test", "int", "x"}
 
 
