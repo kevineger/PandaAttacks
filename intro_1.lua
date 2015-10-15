@@ -39,7 +39,7 @@ function typeWriter(dialog, str)
 	for i = 1, #str do
 	    local letter = str:sub(i,i)
 	    local step = 50
-	    timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
+	     timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
 	end
 end
 
@@ -156,7 +156,7 @@ function scene:hide( event )
 	  continue:removeEventListener("tap", nextScene)
     home:removeEventListener("tap", goHome)
     sceneGroup = nil
-	  
+	  --timer.cancel(dialogTimer)
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
       if introtext then introtext:removeSelf() end
