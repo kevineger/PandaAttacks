@@ -37,6 +37,15 @@ function viewCredits(event)
    
    composer.gotoScene("credit", options)
 end
+function viewTutorial(event)
+   local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   
+   composer.gotoScene("tutorial_1", options)
+end
 
 function blurBackground(bg, p)
    -- Blur the background
@@ -96,7 +105,6 @@ function displayPanda()
    end
 
 end
-
 ---------------------------------------------------------------------------------
 function toGame(event)
    composer.gotoScene( "finderrors" )
@@ -164,6 +172,7 @@ function scene:show( event )
       -- Called when the scene is still off screen (but is about to come on screen).
       play:addEventListener("tap", startGame)
       credits:addEventListener("tap", viewCredits)
+      tutorial:addEventListener("tap", viewTutorial)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -184,6 +193,7 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
       play:removeEventListener("tap", startGame)
       credits:removeEventListener("tap", viewCredits)
+      tutorial:addEventListener("tap", viewTutorial)
       backingMusic = nil
       bassBoom = nil
       sceneGroup = nil
