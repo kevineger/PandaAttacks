@@ -193,7 +193,7 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
       play:removeEventListener("tap", startGame)
       credits:removeEventListener("tap", viewCredits)
-      tutorial:addEventListener("tap", viewTutorial)
+      tutorial:removeEventListener("tap", viewTutorial)
       backingMusic = nil
       bassBoom = nil
       sceneGroup = nil

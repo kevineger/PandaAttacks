@@ -28,20 +28,20 @@ function scene:create( event )
    background.y = display.contentHeight
 
    local introTextOptions = {
-         text = '[TODO: Shannon Fill in Text and change screenshot]',
+         text = 'In game 2 you are given a piece of code with bugs. Click on the piece of code that is incorrect. You have three lives to find all the bugs in the code segment.',
          x = display.contentCenterX,
-         y = display.contentCenterY-250,
+         y = display.contentCenterY-300,
          width = display.contentWidth-100,
          fontSize = 40
    }
    introText = display.newText( introTextOptions )
    introText.alpha = 0
 
-   screenShot = display.newImageRect(sceneGroup, "assets/images/tutorialGame1.png",399,640)
+   screenShot = display.newImageRect(sceneGroup, "assets/images/tutorialGame2.png",388,627)
    screenShot.anchorX = 0.5
-   screenShot.anchorY = 1
+   screenShot.anchorY = 0.5
    screenShot.x = display.contentCenterX
-   screenShot.y = display.contentHeight
+   screenShot.y = display.contentCenterY+200
 
    nextBtn = display.newImageRect(sceneGroup, "assets/images/next.png",400,200)
    nextBtn:scale(.7,.7)
