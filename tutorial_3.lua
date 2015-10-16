@@ -14,6 +14,20 @@ end
 
 ---------------------------------------------------------------------------------
 
+function setFont()
+  local platform = system.getInfo("platformName")
+    
+    local customFont = native.systemFontBold
+
+    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
+        return "PTMono-Bold"
+    elseif ( platform == "Android") then
+      return "PTMono.ttc"
+    end
+
+    return customFont
+end
+
 -- "scene:create()"
 function scene:create( event )
 
@@ -27,21 +41,33 @@ function scene:create( event )
    background.x = display.contentCenterX
    background.y = display.contentHeight
 
+   typeWriterFont = setFont()
+
    local introTextOptions = {
          text = 'In game 2 you are given a piece of code with bugs. Click on the piece of code that is incorrect. You have three lives to find all the bugs in the code segment.',
          x = display.contentCenterX,
-         y = display.contentCenterY-300,
+         y = 250,
          width = display.contentWidth-100,
+         font = typeWriterFont,
          fontSize = 40
    }
    introText = display.newText( introTextOptions )
    introText.alpha = 0
 
    screenShot = display.newImageRect(sceneGroup, "assets/images/tutorialGame2.png",388,627)
+   screenShot:scale(1.4,1.4)
    screenShot.anchorX = 0.5
-   screenShot.anchorY = 0.5
+   screenShot.anchorY = 1
    screenShot.x = display.contentCenterX
-   screenShot.y = display.contentCenterY+200
+   screenShot.y = display.contentCenterY+590
+
+   local border = display.newRoundedRect(sceneGroup, display.contentCenterX, display.contentCenterY + 580, 
+      display.contentWidth - 200, 870, 10 )
+   border.anchorX = 0.5
+   border.anchorY = 1
+   border:setFillColor(0, 0, 0, 0)
+   border.strokeWidth = 15
+   border:setStrokeColor(0.5)
 
    nextBtn = display.newImageRect(sceneGroup, "assets/images/next.png",400,200)
    nextBtn:scale(.7,.7)

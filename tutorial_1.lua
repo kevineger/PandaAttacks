@@ -14,6 +14,20 @@ end
 
 ---------------------------------------------------------------------------------
 
+function setFont()
+  local platform = system.getInfo("platformName")
+    
+    local customFont = native.systemFontBold
+
+    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
+        return "PTMono-Bold"
+    elseif ( platform == "Android") then
+      return "PTMono.ttc"
+    end
+
+    return customFont
+end
+
 -- "scene:create()"
 function scene:create( event )
 
@@ -26,12 +40,15 @@ function scene:create( event )
    -- Place background image in center of screen
    background.x = display.contentCenterX
    background.y = display.contentHeight
+   
+   local typeWriterFont = setFont()
 
    local introTextOptions = {
-         text = 'The first part of game 1 prompts you to answer the correct loop for the given question. You will have two attempts. If you fail to answer the question after the two attempts, feel free to retry (with different parameters)!',
+         text = 'The first part of game 1 prompts you to select the correct loop for the given question. You will have two attempts. If you fail to answer the question after the two attempts, feel free to retry (with different parameters)!',
          x = display.contentCenterX,
-         y = display.contentCenterY-250,
+         y = 250,
          width = display.contentWidth-100,
+         font = typeWriterFont,
          fontSize = 40
    }
    introText = display.newText( introTextOptions )
@@ -40,8 +57,17 @@ function scene:create( event )
    screenShot = display.newImageRect(sceneGroup, "assets/images/tutorialGame1.png",399,640)
    screenShot.anchorX = 0.5
    screenShot.anchorY = 1
+   screenShot:scale(1.5,1.5)
    screenShot.x = display.contentCenterX
-   screenShot.y = display.contentCenterY+550
+   screenShot.y = display.contentCenterY+600
+
+   local border = display.newRoundedRect(sceneGroup, display.contentCenterX, display.contentCenterY + 575, 
+      display.contentWidth - 200, 800, 10 )
+   border.anchorX = 0.5
+   border.anchorY = 1
+   border:setFillColor(0, 0, 0, 0)
+   border.strokeWidth = 15
+   border:setStrokeColor(0.5)
 
    nextBtn = display.newImageRect(sceneGroup, "assets/images/next.png",400,200)
    nextBtn:scale(.7,.7)

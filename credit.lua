@@ -55,17 +55,20 @@ function scene:create( event )
    sceneGroup:insert(title)
 
    -- Home Button
+   -- Home Button
    home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
    home:scale(0.5, 0.5)
+   home.anchorX = 0.5
+   home.anchorY = 0.5
    home.x = 100
-   home.y = 150
+   home.y = display.contentHeight - 80
    sceneGroup:insert(home)
 
    -- Create the widget
   scrollView = widget.newScrollView
   {
       x = display.contentCenterX,
-      y = display.contentCenterY+150,
+      y = display.contentCenterY+125,
       width = display.contentWidth - 100,
       height = display.contentHeight/2,
       horizontalScrollDisabled = true,
@@ -75,7 +78,7 @@ function scene:create( event )
   }
   sceneGroup:insert(scrollView)
 
-  local border = display.newRoundedRect(sceneGroup, display.contentCenterX, display.contentCenterY+150, display.contentWidth - 100, display.contentHeight/2, 10 )
+  local border = display.newRoundedRect(sceneGroup, display.contentCenterX, display.contentCenterY+125, display.contentWidth - 100, display.contentHeight/2, 10 )
   border:setFillColor(0, 0, 0, 0)
   border.strokeWidth = 10
   border:setStrokeColor(0.5)
@@ -97,17 +100,17 @@ function scene:show( event )
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
 
-      local text_content = "Background Image: https://pixabay.com/en/room-background-dark-shadow-wall-315257/"
-      	.. "\n\nNumber 1: https://thenounproject.com/search/?q=number%20one&i=60413"
-      	.. "\n\nNumber 2: https://thenounproject.com/search/?q=number+two&i=61038"
-      	.. "\n\nDrum Audio: https://www.freesound.org/people/Taira%20Komori/sounds/213324/"
-      	.. "\n\nSoundtrack: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100640"
-      	.. "\n\nPanda: http://vector.me/browse/330110/panda02"
-      	.. "\n\nComputers: http://vector.me/browse/129833/web_virtualization_server_clip_art"
-      	.. "\n\nElectric Spark: http://vector.me/browse/105213/electric_spark_clip_art"
-      	.. "\n\nGladys: http://vector.me/browse/193991/robot_carrying_things_clip_art"
-      	.. "\n\nPortal: http://vector.me/browse/426498/whirlpool"
-      	.. "\n\nPortal Gun: http://vector.me/browse/690762/futuristic_gun"
+      local text_content = "Background Image:\nPublic Domain\nhttps://pixabay.com/en/room-background-dark-shadow-wall-315257/"
+      	.. "\n\nNumber 1:\nBy:Till Teenck\nhttps://thenounproject.com/search/?q=number%20one&i=60413"
+      	.. "\n\nNumber 2:\nBy: Till Teenck\nhttps://thenounproject.com/search/?q=number+two&i=61038"
+      	.. "\n\nDrum Audio:\nBy: Kevin MacLeod\nhttps://www.freesound.org/people/Taira%20Komori/sounds/213324/"
+      	.. "\n\nSoundtrack:\nBy: Taira Komori\nhttp://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100640"
+      	.. "\n\nPanda:\nBy: shu\nhttp://vector.me/browse/330110/panda02"
+      	.. "\n\nComputers:\nFreeware\nhttp://vector.me/browse/129833/web_virtualization_server_clip_art"
+      	.. "\n\nElectric Spark:\nFreeware\nhttp://vector.me/browse/105213/electric_spark_clip_art"
+      	.. "\n\nGladys:\nFreeware\nhttp://vector.me/browse/193991/robot_carrying_things_clip_art"
+      	.. "\n\nPortal:\nBy: Andy\nhttp://vector.me/browse/426498/whirlpool"
+      	.. "\n\nPortal Gun:\nBy: Merlin2525\nhttp://vector.me/browse/690762/futuristic_gun"
 
       local text_options = {
           text = text_content,
