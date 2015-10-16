@@ -77,6 +77,7 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
       nextBtn:addEventListener("tap", nextTutorial)
       screenShot:removeSelf()
+      introText:removeSelf()
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end

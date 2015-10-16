@@ -155,6 +155,7 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
 	  continue:removeEventListener("tap", nextScene)
     home:removeEventListener("tap", goHome)
+    introtext = nil
     sceneGroup = nil
 	  --timer.cancel(dialogTimer)
    elseif ( phase == "did" ) then
