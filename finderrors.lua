@@ -65,18 +65,12 @@ local function clickError( event )
       lives = lives-1
    end
 
-
-   
-
    --all errors have been found
    if currScore == total then
       --questionNum = questionNum + 1
       --questionDisplay.text = questionNum
       goToWin()
    end
-
-
-
 end
 
 --sets a string to separate clickable objects
