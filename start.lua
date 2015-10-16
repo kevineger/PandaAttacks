@@ -154,11 +154,13 @@ function scene:create( event )
    credits.x = display.contentCenterX + 200
    credits.y = display.contentHeight
 
+   blurBackground(background, play)
+
    -- Animate the scene background
-   timer.performWithDelay(1000,
-      function()
-         blurBackground(background, play)
-      end, 1)
+   -- timer.performWithDelay(1000,
+   --    function()
+   --       blurBackground(background, play)
+   --    end, 1)
 
 end
 
@@ -197,8 +199,10 @@ function scene:hide( event )
       backingMusic = nil
       bassBoom = nil
       sceneGroup = nil
-      timer.cancel(normalTimer)
-      timer.cancel(blurTimer)
+      if normalTimer then timer.cancel(normalTimer) end
+      if blurTimer then timer.cancel(blurTimer) end
+      normalTimer = nil
+      blurTimer = nil
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
       -- Remove play button event listener

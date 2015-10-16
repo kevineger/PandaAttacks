@@ -153,9 +153,10 @@ function scene:hide( event )
       continue:removeEventListener("tap", nextScene)
       sceneGroup = nil
       home:removeEventListener("tap", goHome)     
+      -- if introtext then introtext:removeSelf() end
+      introtext = nil
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
-      if introtext then introtext:removeSelf() end
    end
 end
 
