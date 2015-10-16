@@ -28,18 +28,18 @@ end
 
 ---------------------------------------------------------------------------------
  
-function updateDialog(dialog, str)
-   return function()
-      dialog.text = dialog.text .. str
-    end
+ --concatinates a letter to the text displayed
+function updateDialog( event )
+  dialogTimer = event.source
+  local letter = introtext_content:sub(i,i)
+  introtext.text = introtext.text .. letter
+  i = i + 1
 end
 
-function typeWriter(dialog, str)
-   for i = 1, #str do
-       local letter = str:sub(i,i)
-       local step = 50
-       timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
-   end
+--calls updateDialog on a delay 
+function typeWriter()
+  i = 1
+  timer.performWithDelay(50, updateDialog, string.len(introtext_content))
 end
 
 function setFont()
@@ -118,7 +118,7 @@ function scene:show( event )
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
       
-      local introtext_content = "Great job, you have succesfully made a portal gun. "
+      introtext_content = "Great job, you have succesfully made a portal gun. "
         .. "Now, continue your misson and stop Panda!"
 
       local introtext_options = {
@@ -130,11 +130,10 @@ function scene:show( event )
           fontSize = 40,
       }
 
-      local introtext = display.newText( introtext_options )
-      typeWriter(introtext, introtext_content)
-      sceneGroup:insert(introtext)  
-
-
+      introtext = display.newText( introtext_options )
+      sceneGroup:insert(introtext) 
+      typeWriter()
+ 
    composer.removeScene("game_1") 
    end
 end
@@ -151,7 +150,8 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
       continue:removeEventListener("tap", nextScene)
       sceneGroup = nil
-      home:removeEventListener("tap", goHome)     
+      home:removeEventListener("tap", goHome)
+      timer.cancel(dialogTimer)     
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end

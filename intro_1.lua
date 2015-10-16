@@ -28,19 +28,18 @@ function nextScene(event)
 end
 
 ---------------------------------------------------------------------------------
- 
-function updateDialog(dialog, str)
-	return function()
-		dialog.text = dialog.text .. str
-  end
+ --concatinates a letter to the text displayed
+function updateDialog( event )
+  dialogTimer = event.source
+  local letter = introtext_content:sub(i,i)
+  introtext.text = introtext.text .. letter
+  i = i + 1
 end
 
-function typeWriter(dialog, str)
-	for i = 1, #str do
-	    local letter = str:sub(i,i)
-	    local step = 50
-	     timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
-	end
+--calls updateDialog on a delay 
+function typeWriter()
+  i = 1
+  timer.performWithDelay(50, updateDialog, string.len(introtext_content))
 end
 
 function setFont()
@@ -120,7 +119,7 @@ function scene:show( event )
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
 
-		local introtext_content = "Oh no, Panda made his way into our server room! At " 
+		introtext_content = "Oh no, Panda made his way into our server room! At " 
 			.. "first he seemed to be captivated by the computer system's whirling and beeping, " 
 		.."but it didn't take long for the sounds to anger him. Panda has now begun to rip "
 		.."out the computer cables and hardware."
@@ -135,9 +134,9 @@ function scene:show( event )
 		}
 
 		introtext = display.newText( introtext_options )
-		typeWriter(introtext, introtext_content)
-		sceneGroup:insert(introtext)
-		  
+    sceneGroup:insert(introtext)
+    typeWriter()
+		--typeWriter(introtext, introtext_content)  
 		composer.removeScene("start")	
 	  
    end
@@ -155,12 +154,11 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
 	  continue:removeEventListener("tap", nextScene)
     home:removeEventListener("tap", goHome)
-    introtext = nil
+    timer.cancel(dialogTimer)
     sceneGroup = nil
 	  --timer.cancel(dialogTimer)
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
-      if introtext then introtext:removeSelf() end
    end
 end
 

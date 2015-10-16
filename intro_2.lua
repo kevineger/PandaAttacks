@@ -29,18 +29,18 @@ end
 
 ---------------------------------------------------------------------------------
  
-function updateDialog(dialog, str)
-   return function()
-      dialog.text = dialog.text .. str
-    end
+ --concatinates a letter to the text displayed
+function updateDialog( event )
+  dialogTimer = event.source
+  local letter = introtext_content:sub(i,i)
+  introtext.text = introtext.text .. letter
+  i = i + 1
 end
 
-function typeWriter(dialog, str)
-   for i = 1, #str do
-       local letter = str:sub(i,i)
-       local step = 50
-       timer.performWithDelay(500 + step * i, updateDialog(dialog, letter))
-   end
+--calls updateDialog on a delay 
+function typeWriter()
+  i = 1
+  timer.performWithDelay(50, updateDialog, string.len(introtext_content))
 end
 
 function setFont()
@@ -118,7 +118,7 @@ function scene:show( event )
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
 
-      local introtext_content = "We need you to stop Panda before it's too late! Don't worry you won't have to complete "
+      introtext_content = "We need you to stop Panda before it's too late! Don't worry you won't have to complete "
       .."this task alone, you will have Gladys, the world's most powerful AI at your side. Gladys knows a lot but she "
       .."doesn't know how to defeat Panda. Hmm, a portal gun should do the trick. Help Gladys to improve her abilities "
       .."by learning to print and use a 3D portal gun. "
@@ -132,8 +132,8 @@ function scene:show( event )
           fontSize = 40,
       }
 
-      local introtext = display.newText( introtext_options )
-      typeWriter(introtext, introtext_content)
+      introtext = display.newText( introtext_options )
+      typeWriter()
       sceneGroup:insert(introtext)  
         
       composer.removeScene("intro_1") 
@@ -155,6 +155,7 @@ function scene:hide( event )
       home:removeEventListener("tap", goHome)     
       -- if introtext then introtext:removeSelf() end
       introtext = nil
+      timer.cancel(dialogTimer)
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
