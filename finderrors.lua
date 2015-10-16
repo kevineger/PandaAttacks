@@ -40,6 +40,21 @@ function goToWin(event)
    composer.gotoScene("winning_2", options)
 end
 
+-- set typewriter font depending on device
+function setFont()
+   local platform = system.getInfo("platformName")
+    
+    local customFont = native.systemFontBold
+
+    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
+         return "PTMono-Bold"
+    elseif ( platform == "Android") then
+      return "PTMono.ttc"
+    end
+
+    return customFont
+end
+
 --circles word when clicked
 local function clickError( event )
 
@@ -138,6 +153,8 @@ function scene:create( event )
 
    sceneGroup = self.view
 
+   typeWriterFont = setFont()
+
    background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
    background.anchorX = 0.5
    background.anchorY = 1
@@ -151,7 +168,7 @@ function scene:create( event )
    y = 200,
    width = display.contentWidth-100, 
    height = 120,
-   font = native.systemFont, 
+   font = typeWriterFont, 
    fontSize = 50,
    align = "center"
    }

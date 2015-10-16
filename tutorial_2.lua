@@ -14,6 +14,20 @@ end
 
 ---------------------------------------------------------------------------------
 
+function setFont()
+  local platform = system.getInfo("platformName")
+    
+    local customFont = native.systemFontBold
+
+    if ( platform == "Mac OS X" or platform == "iPhone OS" ) then
+        return "PTMono-Bold"
+    elseif ( platform == "Android") then
+      return "PTMono.ttc"
+    end
+
+    return customFont
+end
+
 -- "scene:create()"
 function scene:create( event )
 
@@ -27,21 +41,33 @@ function scene:create( event )
    background.x = display.contentCenterX
    background.y = display.contentHeight
 
+   typeWriterFont = setFont()
+
    local introTextOptions = {
-         text = 'The second part of game 1 prompts you to fill in the missing code segments of a randomly generated nexted loop. Errors will be highlighted in red upon submission.',
+         text = 'The second part of game 1 prompts you to fill in the missing code segments of a randomly generated nested loop. Errors will be highlighted in red upon submission.',
          x = display.contentCenterX,
-         y = display.contentCenterY-250,
+         y = 250,
          width = display.contentWidth-100,
+         font = typeWriterFont,
          fontSize = 40
    }
    introText = display.newText( introTextOptions )
    introText.alpha = 0
 
    screenShot = display.newImageRect(sceneGroup, "assets/images/tutorialGame1_2.png",389,314)
+   screenShot:scale(1.5,1.5)
    screenShot.anchorX = 0.5
    screenShot.anchorY = 1
    screenShot.x = display.contentCenterX
    screenShot.y = display.contentCenterY+250
+
+   local border = display.newRoundedRect(sceneGroup, display.contentCenterX, display.contentCenterY + 575, 
+      display.contentWidth - 200, 800, 10 )
+   border.anchorX = 0.5
+   border.anchorY = 1
+   border:setFillColor(0, 0, 0, 0)
+   border.strokeWidth = 15
+   border:setStrokeColor(0.5)
 
    nextBtn = display.newImageRect(sceneGroup, "assets/images/next.png",400,200)
    nextBtn:scale(.7,.7)

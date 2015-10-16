@@ -123,7 +123,7 @@ function scene:show( event )
       -- Example: start timers, begin animation, play audio, etc.
       
       local introtext_content = "Success! You fixed the portal gun and used it to trap Panda in an "
-          .. "infinte portal loop to trap Panda."
+          .. "infinte portal loop."
 
       local introtext_options = {
           text = '',
