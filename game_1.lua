@@ -75,14 +75,14 @@ function checkAnswer(event)
 end
 
 function flashPanda()
-   panda = display.newImageRect(sceneGroup, "assets/images/panda.png", 1000, 1000)
-   panda:scale(0.5, 0.5)
-   panda.anchorX = 0.5
-   panda.anchorY = 0.5
+   incorrectPanda = display.newImageRect(sceneGroup, "assets/images/panda.png", 1000, 1000)
+   incorrectPanda:scale(0.5, 0.5)
+   incorrectPanda.anchorX = 0.5
+   incorrectPanda.anchorY = 0.5
    -- Right Side
-   panda.x = display.contentWidth - 80
-   panda.y = display.contentHeight - math.random(100, 800)
-   panda.rotation = 300
+   incorrectPanda.x = display.contentWidth - 80
+   incorrectPanda.y = display.contentHeight - math.random(100, 800)
+   incorrectPanda.rotation = 300
 end
 
 -- set typewriter font depending on device
@@ -230,10 +230,10 @@ function scene:hide( event )
    elseif ( phase == "did" ) then
       print "Hit teardown"
       -- Called immediately after scene goes off screen.
-      timer.cancel(winTimer)
+      if winTimer then timer.cancel(winTimer) end
       if gg then gg:removeSelf() end
       if retry then retry:removeSelf() end
-      if panda then panda:removeSelf() end
+      if incorrectPanda then incorrectPanda:removeSelf() end
       incorrect = nil
    end
 end
