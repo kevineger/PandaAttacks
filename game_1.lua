@@ -1,6 +1,8 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+local analytics = require("gameAnal")
+
 question_generator = require ("questionGenerators.question1_generator")
 
 ---------------------------------------------------------------------------------
@@ -57,11 +59,14 @@ end
 function checkAnswer(event)
    print ("Selected answer: " .. event.target.id)
    if ( event.target.id == 1 ) then
+      analytics.correctAnswerG1()
       nextLevel()
    else
       if incorrect then
+         analytics.incorrectAnswerG1()
          gameOver()
       else
+         analytics.incorrectAnswerG1()
          event.target:setFillColor(black)
          flashPanda()
          incorrect = display.newImageRect(sceneGroup, "assets/images/incorrect.png", 3362, 837)

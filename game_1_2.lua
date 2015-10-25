@@ -1,6 +1,9 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+local analytics = require("gameAnal")
+
+
 question_generator = require ("questionGenerators.question2_generator")
 
 ---------------------------------------------------------------------------------
@@ -28,14 +31,12 @@ end
 function checkAnswers()
    local complete = true;
    if ( textInput1.text == "int i" ) then  
-      print "first check"
       textInput1:setTextColor( 0, 138, 46 )
    else
       complete = false
       textInput1:setTextColor( 204, 0, 0 )
    end
    if ( textInput2.text == "length()" ) then
-      print "second"
       textInput2:setTextColor( 0, 138, 46 )
    else
       complete = false
@@ -55,7 +56,11 @@ function checkAnswers()
    end
    -- complete = true
    if complete then
+      analytics.correctAnswerG1()
+      analytics.sendToParse()
       win()
+   else
+     analytics.incorrectAnswerG1()
    end
 end
 
