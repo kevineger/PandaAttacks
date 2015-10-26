@@ -34,24 +34,28 @@ function checkAnswers()
       textInput1:setTextColor( 0, 138, 46 )
    else
       complete = false
+      analytics.checkForTypo("int i", textInput1.text)
       textInput1:setTextColor( 204, 0, 0 )
    end
    if ( textInput2.text == "length()" ) then
       textInput2:setTextColor( 0, 138, 46 )
    else
       complete = false
+      analytics.checkForTypo("length()", textInput2.text)
       textInput2:setTextColor( 204, 0, 0 )
    end
    if ( textInput3.text == "k++){" ) then 
       textInput3:setTextColor( 0, 138, 46 )
    else
       complete = false
+      analytics.checkForTypo("k++){", textInput3.text)
       textInput3:setTextColor( 204, 0, 0 )
    end
    if ( textInput4.text == "k" ) then 
       textInput4:setTextColor( 0, 138, 46 )
    else
       complete = false
+      analytics.checkForTypo("k", textInput4.text)
       textInput4:setTextColor( 204, 0, 0 )
    end
    -- complete = true
@@ -65,6 +69,8 @@ function checkAnswers()
 end
 
 function win()
+   analytics.part2Play()
+   
    questionText:removeSelf()
    loopText1:removeSelf()
    loopText2:removeSelf()

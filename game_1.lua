@@ -11,6 +11,8 @@ question_generator = require ("questionGenerators.question1_generator")
 ---------------------------------------------------------------------------------
 
 function nextLevel(event)
+   analytics.part1Play()
+   
    if incorrect then incorrect:removeSelf() end
    ans[2]:removeSelf()
    ans[3]:removeSelf()
@@ -159,7 +161,6 @@ function printAnswers()
 end
 
 function printAnswer(num, padding)
-   print ("Printing answer " .. num)
    local answerTextOptions = {
          text = question_generator.getAnswer(num),
          font = native.systemFont,
@@ -233,7 +234,6 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
    elseif ( phase == "did" ) then
-      print "Hit teardown"
       -- Called immediately after scene goes off screen.
       if winTimer then timer.cancel(winTimer) end
       if gg then gg:removeSelf() end
@@ -247,8 +247,6 @@ end
 function scene:destroy( event )
 
    local sceneGroup = self.view
-
-   print "Hit Destroy"
 
    -- Called prior to the removal of scene's view ("sceneGroup").
    -- Insert code here to clean up the scene.
