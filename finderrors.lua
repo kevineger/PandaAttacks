@@ -19,6 +19,7 @@ local currScore = 0
 local total = 4
 local lives = 3
 local questionNum = 1
+local errorsFound = {}
 
 --local r = Math.random(10)
 local r = 1   
@@ -73,11 +74,13 @@ local function clickError( event )
    if event.target.error == true then
       currScore = currScore + 1
       scoreDisplay.text = currScore
+      errorsFound[#errorsFound+1] = event.target.word
       analytics.correctAnswerG2()
    else
       endTime = os.time(os.date('*t'))
       analytics.incorrectAnswerG2()
       if lives == 0 then
+         analytics.sendErrorsFound(errorsFound)
          analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "lose", ["startTime"] = startTime, ["endTime"] = endTime})
          composer.gotoScene("losing_2")
       elseif lives >= 1 then
@@ -92,6 +95,7 @@ local function clickError( event )
       --questionNum = questionNum + 1
       --questionDisplay.text = questionNum
       endTime = os.time(os.date('*t'))
+      analytics.sendErrorsFound(errorsFound)
       analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
       goToWin()
 
@@ -160,6 +164,9 @@ function scene:create( event )
 
    typeWriterFont = setFont()
 
+   analytics.reset()
+
+   print(analytics.getIncorrectAnswerG2())
    background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
    background.anchorX = 0.5
    background.anchorY = 1
@@ -208,7 +215,7 @@ function scene:create( event )
    home.y = display.contentHeight - 80
    sceneGroup:insert(home)
 
-   analytics.getValue("game_2_2", "hucxjhMIol")
+   
    
 end
 

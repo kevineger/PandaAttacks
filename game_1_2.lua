@@ -27,6 +27,7 @@ end
 ---------------------------------------------------------------------------------
 --CustomFunc---------------------------------------------------------------------
 ---------------------------------------------------------------------------------
+local startTime = os.time(os.date('*t'))
 
 function checkAnswers()
    local complete = true;
@@ -60,8 +61,9 @@ function checkAnswers()
    end
    -- complete = true
    if complete then
+      local endTime = os.time(os.date('*t'))
       analytics.correctAnswerG1()
-      analytics.sendToParse("game_1", {["incorrect"] = analytics.getIncorrectAnswerG1(), ["correct"] = analytics.getCorrectAnswerG1(), ["total"] = analytics.getTotalAnswerG1()})
+      analytics.sendToParse("game_1", {["incorrect"] = analytics.getIncorrectAnswerG1(), ["correct"] = analytics.getCorrectAnswerG1(), ["total"] = analytics.getTotalAnswerG1(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
       win()
    else
      analytics.incorrectAnswerG1()
@@ -69,7 +71,7 @@ function checkAnswers()
 end
 
 function win()
-   analytics.part2Play()
+   analytics.updateTotal("game_1_3", "goYQo4jfYF", "game_2_plays")
    
    questionText:removeSelf()
    loopText1:removeSelf()

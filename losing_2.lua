@@ -1,6 +1,7 @@
 
 local composer = require( "composer" )
 local scene = composer.newScene()
+local analytics = require("gameAnal")
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -13,6 +14,7 @@ local scene = composer.newScene()
 composer.removeHidden()
 
 function goHome(event)
+   analytics.updateTotal("game_2_2", "hucxjhMIol", "quit")
    local options =
    {
        effect = "crossFade",
@@ -22,6 +24,7 @@ function goHome(event)
 end
 
 function playAgain(event)
+   analytics.updateTotal("game_2_2", "hucxjhMIol", "retry")
    local options =
    {
        effect = "crossFade",

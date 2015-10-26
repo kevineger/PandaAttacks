@@ -11,7 +11,7 @@ question_generator = require ("questionGenerators.question1_generator")
 ---------------------------------------------------------------------------------
 
 function nextLevel(event)
-   analytics.part1Play()
+   analytics.updateTotal("game_1_3", "goYQo4jfYF", "game_1_plays")
    
    if incorrect then incorrect:removeSelf() end
    ans[2]:removeSelf()
@@ -179,6 +179,8 @@ end
 function scene:create( event )
 
    sceneGroup = self.view
+
+   analytics.reset()
 
    -- Set the background
    background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)

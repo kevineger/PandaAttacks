@@ -1,7 +1,6 @@
 local D = {}
 
 local parse = require ("mod_parse")
-
 local envVars = require("globals")
 
 local g1Incorrect = 0
@@ -20,32 +19,12 @@ parse:init({
 print ("APP ID: " .. envVars.appId)
 print ("API KEY: " .. envVars.apiKey)
 
-function D.part1Play()
-	local result = parse:getObject("game_1_3", "goYQo4jfYF", function(e)
+function D.updateTotal(table, objId, attribute)
+	local result = parse:getObject(table, objId, function(e)
 		if not e.error then
 			print ("Retrieved object from parse")
-			e.response["game_1_plays"] = e.response["game_1_plays"]+1
-			parse:updateObject("game_1_3", "goYQo4jfYF", e.response, function(e2)
-					if not e2.error then
-						print("Updated object in parse")
-					else
-						print (e2.error)
-					end
-				end
-				)
-		else
-			print (e.error)
-		end
-	end
-	)
-end
-
-function D.part2Play()
-	local result = parse:getObject("game_1_3", "goYQo4jfYF", function(e)
-		if not e.error then
-			print ("Retrieved object from parse")
-			e.response["game_2_plays"] = e.response["game_2_plays"]+1
-			parse:updateObject("game_1_3", "goYQo4jfYF", e.response, function(e2)
+			e.response[attribute] = e.response[attribute]+1
+			parse:updateObject(table, objId, e.response, function(e2)
 					if not e2.error then
 						print("Updated object in parse")
 					else
@@ -80,7 +59,11 @@ end
 
 function D.getCorrectAnswerG1()
 	return g1Correct
+end
 
+function D.getTotalAnswerG1()
+	return g1Total
+end
 
 function D.checkForTypo(actualString, enteredString)
 	-- Send actualString to char array
@@ -156,6 +139,32 @@ function D.sendToParse(parseTable, values)
 		end
 	end
 	)
+end
+
+function D.sendErrorsFound(errors)
+	if errors[4] then 
+		D.sendToParse("game_2_3", {["error_1"] = errors[1], ["error_2"] = errors[2], ["error_3"] = errors[3], ["error_4"] = errors[4]})
+
+	elseif errors[3] then
+		D.sendToParse("game_2_3", {["error_1"] = errors[1], ["error_2"] = errors[2], ["error_3"] = errors[3]})
+
+	elseif errors[2] then
+		D.sendToParse("game_2_3", {["error_1"] = errors[1], ["error_2"] = errors[2]})
+
+	elseif errors[1] then
+		D.sendToParse("game_2_3", {["error_1"] = errors[1]})
+	end
+
+end
+
+function D.reset()
+	g1Incorrect = 0
+	g1Correct = 0
+	g1Total = 0
+
+	g2Incorrect = 0
+	g2Correct = 0
+	g2Total = 0
 end
 
 return D
