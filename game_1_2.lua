@@ -57,7 +57,7 @@ function checkAnswers()
    -- complete = true
    if complete then
       analytics.correctAnswerG1()
-      analytics.sendToParse()
+      analytics.sendToParse("game_1", {["incorrect"] = analytics.getIncorrectAnswerG1(), ["correct"] = analytics.getCorrectAnswerG1(), ["total"] = analytics.getTotalAnswerG1()})
       win()
    else
      analytics.incorrectAnswerG1()
