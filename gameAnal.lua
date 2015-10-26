@@ -130,7 +130,7 @@ end
 
 -- function sends game analytics to parse
 function D.sendToParse(parseTable, values)
--- {["incorrect"] = g1Incorrect, ["correct"] = g1Correct, ["total"] = g1Total}
+-- parseTable = "table_name", values = {["col1"] = var1, ["col2"] = var2, ["col3"] = var3}
 	parse:createObject(parseTable, values, function(e)
 		if not e.error then
 			print ("Sent to Parse")

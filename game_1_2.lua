@@ -87,18 +87,18 @@ function win()
    textInput2:removeSelf()
    textInput3:removeSelf()
    textInput4:removeSelf()
-   gg = display.newImageRect("assets/images/success.png", 600, 200)
-   gg.anchorX = 0.5
-   gg.anchorY = 0.5
-   gg.x = display.contentCenterX
-   gg.y = display.contentCenterY
+   success = display.newImageRect("assets/images/success.png", 600, 200)
+   success.anchorX = 0.5
+   success.anchorY = 0.5
+   success.x = display.contentCenterX
+   success.y = display.contentCenterY
    winTimer = timer.performWithDelay(3000,
       function()
          local options = {
             effect = "fade",
             time = 500,
          }
-         gg:removeSelf()
+         success:removeSelf()
          composer.gotoScene( "winning_1", options )
       end, 1)
    submit:removeSelf()

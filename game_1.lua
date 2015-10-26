@@ -238,9 +238,18 @@ function scene:hide( event )
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
       if winTimer then timer.cancel(winTimer) end
-      if gg then gg:removeSelf() end
-      if retry then retry:removeSelf() end
-      if incorrectPanda then incorrectPanda:removeSelf() end
+      if gg then
+         gg:removeSelf()
+         gg = nil
+      end
+      if retry then 
+         retry:removeSelf()
+         retry = nil 
+      end
+      if incorrectPanda then 
+         incorrectPanda:removeSelf()
+         incorrectPanda = nil
+      end
       incorrect = nil
    end
 end
