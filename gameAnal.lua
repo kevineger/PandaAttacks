@@ -8,6 +8,10 @@ local g1Incorrect = 0
 local g1Correct = 0
 local g1Total = 0
 
+local g2Incorrect = 0
+local g2Correct = 0
+local g2Total = 0
+
 parse:init({
 	appId = envVars.appId,
 	apiKey = envVars.apiKey
@@ -76,11 +80,7 @@ end
 
 function D.getCorrectAnswerG1()
 	return g1Correct
-end
 
-function D.getTotalAnswerG1()
-	return g1Total
-end
 
 function D.checkForTypo(actualString, enteredString)
 	-- Send actualString to char array
@@ -108,6 +108,44 @@ function D.checkForTypo(actualString, enteredString)
 	return typo
 end
 
+-- game 2 functions
+
+function D.getCorrectAnswerG2()
+	return g2Correct
+end
+
+function D.getTotalAnswerG2()
+	return g2Total
+end
+
+function D.incorrectAnswerG2()
+	g2Incorrect = g2Incorrect + 1
+	g2Total = g2Total + 1
+	print ("G2 Incorrect:"  .. g2Incorrect)
+	print ("G2 Total:"  .. g2Total)
+end
+
+function D.getIncorrectAnswerG2()
+	return g2Incorrect
+end
+
+function D.correctAnswerG2()
+	g2Correct = g2Correct + 1
+	g2Total = g2Total + 1
+	print ("G2 Correct:"  .. g2Correct)
+	print ("G2 Total:"  .. g2Total)
+end
+
+function D.getCorrectAnswerG2()
+	return g2Correct
+end
+
+function D.getTotalAnswerG2()
+	return g2Total
+end
+
+
+-- function sends game analytics to parse
 function D.sendToParse(parseTable, values)
 -- {["incorrect"] = g1Incorrect, ["correct"] = g1Correct, ["total"] = g1Total}
 	parse:createObject(parseTable, values, function(e)

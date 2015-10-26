@@ -1,6 +1,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local question = require("questions")
+local analytics = require("gameAnal")
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -21,6 +22,8 @@ local questionNum = 1
 
 --local r = Math.random(10)
 local r = 1   
+local endTime
+local startTime = os.time(os.date('*t'))
 
 function goHome(event)
    local options =
@@ -70,27 +73,29 @@ local function clickError( event )
    if event.target.error == true then
       currScore = currScore + 1
       scoreDisplay.text = currScore
+      analytics.correctAnswerG2()
    else
-      
+      endTime = os.time(os.date('*t'))
+      analytics.incorrectAnswerG2()
       if lives == 0 then
+         analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "lose", ["startTime"] = startTime, ["endTime"] = endTime})
          composer.gotoScene("losing_2")
       elseif lives >= 1 then
          heart[lives]:removeSelf()
       end
       lives = lives-1
+      
    end
-
-
-   
 
    --all errors have been found
    if currScore == total then
       --questionNum = questionNum + 1
       --questionDisplay.text = questionNum
+      endTime = os.time(os.date('*t'))
+      analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
       goToWin()
+
    end
-
-
 
 end
 
@@ -202,7 +207,8 @@ function scene:create( event )
    home.x = 100
    home.y = display.contentHeight - 80
    sceneGroup:insert(home)
-   
+
+   analytics.getValue("game_2_2", "hucxjhMIol")
    
 end
 
