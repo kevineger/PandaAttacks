@@ -11,7 +11,7 @@ question_generator = require ("questionGenerators.question1_generator")
 ---------------------------------------------------------------------------------
 
 function nextLevel(event)
-   analytics.updateTotal("game_1_3", "goYQo4jfYF", "game_1_plays")
+   --analytics.updateTotal("game_1_3", "goYQo4jfYF", "game_1_plays")
    
    if incorrect then incorrect:removeSelf() end
    ans[2]:removeSelf()
@@ -61,14 +61,14 @@ end
 function checkAnswer(event)
    print ("Selected answer: " .. event.target.id)
    if ( event.target.id == 1 ) then
-      analytics.correctAnswerG1()
+      --analytics.correctAnswerG1()
       nextLevel()
    else
       if incorrect then
-         analytics.incorrectAnswerG1()
+         --analytics.incorrectAnswerG1()
          gameOver()
       else
-         analytics.incorrectAnswerG1()
+         --analytics.incorrectAnswerG1()
          event.target:setFillColor(black)
          flashPanda()
          incorrect = display.newImageRect(sceneGroup, "assets/images/incorrect.png", 3362, 837)
@@ -180,7 +180,7 @@ function scene:create( event )
 
    sceneGroup = self.view
 
-   analytics.reset()
+   --analytics.reset()
 
    -- Set the background
    background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
@@ -238,6 +238,7 @@ function scene:hide( event )
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
       if winTimer then timer.cancel(winTimer) end
+      
       if gg then
          gg:removeSelf()
          gg = nil

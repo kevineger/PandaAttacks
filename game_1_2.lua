@@ -35,43 +35,43 @@ function checkAnswers()
       textInput1:setTextColor( 0, 138, 46 )
    else
       complete = false
-      analytics.checkForTypo("int i", textInput1.text)
+      --analytics.checkForTypo("int i", textInput1.text)
       textInput1:setTextColor( 204, 0, 0 )
    end
    if ( textInput2.text == "length()" ) then
       textInput2:setTextColor( 0, 138, 46 )
    else
       complete = false
-      analytics.checkForTypo("length()", textInput2.text)
+      --analytics.checkForTypo("length()", textInput2.text)
       textInput2:setTextColor( 204, 0, 0 )
    end
    if ( textInput3.text == "k++){" ) then 
       textInput3:setTextColor( 0, 138, 46 )
    else
       complete = false
-      analytics.checkForTypo("k++){", textInput3.text)
+      --analytics.checkForTypo("k++){", textInput3.text)
       textInput3:setTextColor( 204, 0, 0 )
    end
    if ( textInput4.text == "k" ) then 
       textInput4:setTextColor( 0, 138, 46 )
    else
       complete = false
-      analytics.checkForTypo("k", textInput4.text)
+      --analytics.checkForTypo("k", textInput4.text)
       textInput4:setTextColor( 204, 0, 0 )
    end
    -- complete = true
    if complete then
       local endTime = os.time(os.date('*t'))
-      analytics.correctAnswerG1()
-      analytics.sendToParse("game_1", {["incorrect"] = analytics.getIncorrectAnswerG1(), ["correct"] = analytics.getCorrectAnswerG1(), ["total"] = analytics.getTotalAnswerG1(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
+      --analytics.correctAnswerG1()
+      --analytics.sendToParse("game_1", {["incorrect"] = analytics.getIncorrectAnswerG1(), ["correct"] = analytics.getCorrectAnswerG1(), ["total"] = analytics.getTotalAnswerG1(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
       win()
    else
-     analytics.incorrectAnswerG1()
+     --analytics.incorrectAnswerG1()
    end
 end
 
 function win()
-   analytics.updateTotal("game_1_3", "goYQo4jfYF", "game_2_plays")
+   --analytics.updateTotal("game_1_3", "goYQo4jfYF", "game_2_plays")
    
    questionText:removeSelf()
    loopText1:removeSelf()
