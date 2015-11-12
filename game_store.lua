@@ -1,47 +1,35 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+local coins = require("coins_data")
+coins.init()
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
 
 -- local forward references should go here
-
-function goHome(event)
+function goToGames(event)
    local options =
    {
        effect = "crossFade",
        time = 400,
    }
-   composer.gotoScene("start", options)
+   composer.gotoScene("select", options)
 end
 
-function goToStore(event)
-   local options =
-   {
-       effect = "crossFade",
-       time = 400,
-   }
-   composer.gotoScene("game_store", options)
-end
 
-function goToGameOne(event)
-   local options =
-   {
-       effect = "crossFade",
-       time = 400,
-   }
-   composer.gotoScene("game_1", options)
-end
-
-function goToGameTwo(event)
-   local options =
-   {
-       effect = "crossFade",
-       time = 400,
-   }
-   composer.gotoScene("finderrors", options)
+function updateCoins()
+   if coins.load() == nil then
+      coins.set(5)
+      coinText.text = 5;
+   else
+      local coin_val = coins.load() + 5
+      coins.set(coin_val)
+      coinText.text = coin_val;
+   end
+   coins.save()
 end
 
 ---------------------------------------------------------------------------------
@@ -60,42 +48,38 @@ function scene:create( event )
    background.x = display.contentCenterX
    background.y = display.contentHeight
 
-   -- Select Text
-   play = display.newImageRect(sceneGroup, "assets/images/select.png",1000,677)
-   play:scale(0.5, 0.5)
-   play.anchorX = 0.5
-   play.anchorY = 1
-   play.x = display.contentCenterX
-   play.y = 400
-
-   -- Adds level one icon
-   levelOne = display.newImageRect(sceneGroup, "assets/images/levelOneGrey.png",700,700)
-   levelOne:scale(0.5, 0.5)
-   levelOne.anchorX = 0.5
-   levelOne.anchorY = 1
-   levelOne.x = display.contentCenterX - 150
-   levelOne.y = display.contentHeight - 500
-
-   -- Adds level two icon
-   levelTwo = display.newImageRect(sceneGroup, "assets/images/levelTwoGrey.png",700,700)
-   levelTwo:scale(0.5, 0.5)
-   levelTwo.anchorX = 0.5
-   levelTwo.anchorY = 1
-   levelTwo.x = display.contentCenterX + 150
-   levelTwo.y = display.contentHeight - 500
-
-   -- Home Button
-   home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
-   home:scale(0.5, 0.5)
-   home.anchorX = 0.5
-   home.anchorY = 0.5
-   home.x = 100
-   home.y = display.contentHeight - 80
-
-   -- Store Button 
+   -- Store Title 
    store = display.newImageRect(sceneGroup, "assets/images/store.png",285,116)
    store.x = display.contentCenterX
-   store.y = display.contentCenterY + 300
+   store.y = 75
+
+   -- Back Button
+   back = display.newImageRect(sceneGroup, "assets/images/back.png",248,116)
+   back.x = 130
+   back.y = display.contentHeight - 60
+
+   -- Powerups Button
+   local powerups = display.newImageRect(sceneGroup, "assets/images/powerups.png",496,116)
+   powerups:scale(0.50, 0.50)
+   powerups.anchorX = 0
+   powerups.x = 10
+   powerups.y = 175
+
+   -- Set the coin display
+   local curr_coins = coins.load()
+   if curr_coins == nil then
+      coinText = display.newText(0, display.contentWidth - 30, display.contentHeight - 45, native.systemFontBold, 40)
+   else
+      coinText = display.newText(curr_coins, display.contentWidth - 30, display.contentHeight - 45, native.systemFontBold, 40)
+   end
+   sceneGroup:insert(coinText)
+
+   -- Add the money bag
+   local money = display.newImageRect(sceneGroup, "assets/images/money.png", 200, 272)
+   money:scale(0.4, 0.4)
+   money.x = display.contentWidth - 105
+   money.y = display.contentHeight - 60
+   sceneGroup:insert(money)
 end
 
 -- "scene:show()"
@@ -106,10 +90,7 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
-      levelOne:addEventListener("tap", goToGameOne)
-      levelTwo:addEventListener("tap", goToGameTwo)
-      home:addEventListener("tap", goHome)
-      store:addEventListener("tap", goToStore)
+      back:addEventListener("tap", goToGames)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -127,10 +108,7 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
-      home:removeEventListener("tap", goHome)
-      store:removeEventListener("tap", goToStore)
-      levelOne:removeEventListener("tap", goToGameOne)
-      levelTwo:removeEventListener("tap", goToGameTwo)
+      back:removeEventListener("tap", goToGames)
       sceneGroup = nil
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.

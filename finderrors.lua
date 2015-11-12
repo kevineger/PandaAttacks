@@ -3,6 +3,9 @@ local scene = composer.newScene()
 local question = require("questions")
 local analytics = require("gameAnal")
 
+local coins = require("coins_data")
+coins.init()
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -25,15 +28,6 @@ local errorsFound = {}
 local r = 1   
 local endTime
 local startTime = os.time(os.date('*t'))
-
-function goHome(event)
-   local options =
-   {
-       effect = "crossFade",
-       time = 400,
-   }
-   composer.gotoScene("start", options)
-end
 
 function goToWin(event)
    local options =
@@ -59,10 +53,20 @@ function setFont()
     return customFont
 end
 
+function updateCoins()
+   if coins.load() == nil then
+      coins.set(5)
+      coinText.text = 5;
+   else
+      local coin_val = coins.load() + 5
+      coins.set(coin_val)
+      coinText.text = coin_val;
+   end
+   coins.save()
+end
+
 --circles word when clicked
 local function clickError( event )
-
-
    circleSelect = display.newRoundedRect(sceneGroup, event.target.x, event.target.y, event.target.width, event.target.height, 3)
    circleSelect:setFillColor(0,0,0,0)
    circleSelect.strokeWidth = 3
@@ -97,6 +101,7 @@ local function clickError( event )
       endTime = os.time(os.date('*t'))
       analytics.sendErrorsFound(errorsFound)
       analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
+      updateCoins()
       goToWin()
 
    end
@@ -207,14 +212,21 @@ function scene:create( event )
       x = x + 100
    end
 
-   home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
-   home:scale(0.5, 0.5)
-   home.anchorX = 0.5
-   home.anchorY = 0.5
-   home.x = 100
-   home.y = display.contentHeight - 80
-   sceneGroup:insert(home)
+   -- Set the coin display
+   local curr_coins = coins.load()
+   if curr_coins == nil then
+      coinText = display.newText(0, 115, display.contentHeight - 95, native.systemFontBold, 40)
+   else
+      coinText = display.newText(curr_coins, 115, display.contentHeight - 95, native.systemFontBold, 40)
+   end
+   sceneGroup:insert(coinText)
 
+   -- Add the money bag
+   local money = display.newImageRect(sceneGroup, "assets/images/money.png", 200, 272)
+   money:scale(0.4, 0.4)
+   money.x = 50
+   money.y = display.contentHeight - 105
+   sceneGroup:insert(money)
    
    
 end
@@ -228,7 +240,6 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
-      home:addEventListener("tap", goHome)
       setQuestion()
 
    elseif ( phase == "did" ) then

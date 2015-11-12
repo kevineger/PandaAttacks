@@ -2,7 +2,7 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 -- handle if user gave consent
-local consent = require( "mydata" )
+local consent = require( "consent_data" )
 consent.init()
 
 ---------------------------------------------------------------------------------
@@ -115,8 +115,8 @@ function scene:create( event )
    sceneGroup = self.view
 
    -- Load the audio tracks
-   backingMusic = audio.loadStream("assets/audio/backgroundMusic.mp3")
-   bassBoom = audio.loadSound("assets/audio/drum.mp3")
+   --backingMusic = audio.loadStream("assets/audio/backgroundMusic.mp3")
+   --bassBoom = audio.loadSound("assets/audio/drum.mp3")
 
    -- Set the background
    background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)

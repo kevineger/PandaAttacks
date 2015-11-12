@@ -3,6 +3,8 @@ local scene = composer.newScene()
 
 local analytics = require("gameAnal")
 
+local coins = require("coins_data")
+coins.init()
 
 question_generator = require ("questionGenerators.question2_generator")
 
@@ -64,6 +66,7 @@ function checkAnswers()
       local endTime = os.time(os.date('*t'))
       analytics.correctAnswerG1()
       analytics.sendToParse("game_1", {["incorrect"] = analytics.getIncorrectAnswerG1(), ["correct"] = analytics.getCorrectAnswerG1(), ["total"] = analytics.getTotalAnswerG1(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
+      updateCoins()
       win()
    else
      analytics.incorrectAnswerG1()
@@ -72,7 +75,7 @@ end
 
 function win()
    analytics.updateTotal("game_1_3", "goYQo4jfYF", "game_2_plays")
-   
+
    questionText:removeSelf()
    loopText1:removeSelf()
    loopText2:removeSelf()
@@ -119,6 +122,18 @@ function setFont()
     return customFont
 end
 
+function updateCoins()
+   if coins.load() == nil then
+      coins.set(5)
+      coinText.text = 5;
+   else
+      local coin_val = coins.load() + 5
+      coins.set(coin_val)
+      coinText.text = coin_val;
+   end
+   coins.save()
+end
+
 ---------------------------------------------------------------------------------
 
 -- "scene:create()"
@@ -142,6 +157,22 @@ function scene:create( event )
    submit.anchorY = 1
    submit.x = display.contentCenterX
    submit.y = display.contentCenterY+130
+
+   -- Set the coin display
+   local curr_coins = coins.load()
+   if curr_coins == nil then
+      coinText = display.newText(0, 115, display.contentHeight - 45, native.systemFontBold, 40)
+   else
+      coinText = display.newText(curr_coins, 115, display.contentHeight - 45, native.systemFontBold, 40)
+   end
+   sceneGroup:insert(coinText)
+
+   -- Add the money bag
+   local money = display.newImageRect(sceneGroup, "assets/images/money.png", 200, 272)
+   money:scale(0.4, 0.4)
+   money.x = 50
+   money.y = display.contentHeight - 60
+   sceneGroup:insert(money)
 end
 
 -- "scene:show()"
