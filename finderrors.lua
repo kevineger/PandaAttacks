@@ -80,8 +80,9 @@ local function clickError( event )
       endTime = os.time(os.date('*t'))
       analytics.incorrectAnswerG2()
       if lives == 0 then
-         analytics.sendErrorsFound(errorsFound)
-         analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "lose", ["startTime"] = startTime, ["endTime"] = endTime})
+         -- analytics.sendErrorsFound(errorsFound)
+         -- analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "lose", ["startTime"] = startTime, ["endTime"] = endTime})
+         analytics.sendToParse("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["totalPercent"] = analytics.getTotalPercentG2()})
          composer.gotoScene("losing_2")
       elseif lives >= 1 then
          heart[lives]:removeSelf()
@@ -95,8 +96,9 @@ local function clickError( event )
       --questionNum = questionNum + 1
       --questionDisplay.text = questionNum
       endTime = os.time(os.date('*t'))
-      analytics.sendErrorsFound(errorsFound)
-      analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
+      -- analytics.sendErrorsFound(errorsFound)
+      -- analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
+      analytics.sendToParse("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["totalPercent"] = analytics.getTotalPercentG2()})
       goToWin()
 
    end
