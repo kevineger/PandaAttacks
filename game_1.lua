@@ -2,6 +2,7 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 local analytics = require("gameAnal")
+local hintDetection = require("hint_mc")
 
 question_generator = require ("questionGenerators.question1_generator")
 
