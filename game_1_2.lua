@@ -2,6 +2,7 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 local analytics = require("gameAnal")
+local typoDetection = require("typo_detection")
 
 local coins = require("coins_data")
 coins.init()
@@ -32,33 +33,45 @@ end
 local startTime = os.time(os.date('*t'))
 
 function checkAnswers()
+   -- Options table for the overlay scene "pause.lua"
+   composer.hideOverlay( "typohint" )
+   local typos = {}
+
    local complete = true;
    if ( textInput1.text == "int i" ) then  
       textInput1:setTextColor( 0, 138, 46 )
    else
       complete = false
-      analytics.checkForTypo("int i", textInput1.text)
+      if (typoDetection.isTypo("int i", textInput1.text, 2)) then
+         typos[#typos + 1] =  textInput1.text
+      end
       textInput1:setTextColor( 204, 0, 0 )
    end
    if ( textInput2.text == "length()" ) then
       textInput2:setTextColor( 0, 138, 46 )
    else
       complete = false
-      analytics.checkForTypo("length()", textInput2.text)
+      if (typoDetection.isTypo("length()", textInput2.text, 3)) then
+         typos[#typos + 1] =  textInput2.text
+      end
       textInput2:setTextColor( 204, 0, 0 )
    end
    if ( textInput3.text == "k++){" ) then 
       textInput3:setTextColor( 0, 138, 46 )
    else
       complete = false
-      analytics.checkForTypo("k++){", textInput3.text)
+      if (typoDetection.isTypo("k++){", textInput3.text, 3)) then
+         typos[#typos + 1] =  textInput3.text
+      end
       textInput3:setTextColor( 204, 0, 0 )
    end
    if ( textInput4.text == "k" ) then 
       textInput4:setTextColor( 0, 138, 46 )
    else
       complete = false
-      analytics.checkForTypo("k", textInput4.text)
+      if (typoDetection.isTypo("k", textInput4.text, 0)) then
+         typos[#typos + 1] =  textInput4.text
+      end
       textInput4:setTextColor( 204, 0, 0 )
    end
    -- complete = true
@@ -71,6 +84,23 @@ function checkAnswers()
    else
      analytics.incorrectAnswerG1()
    end
+
+   -- Show hint if Typo
+   local options = {
+      isModal = true,
+      effect = "fade",
+      time = 400,
+      params = typos
+   }
+
+   if (next(typos) ~= nil) then
+      composer.showOverlay( "typohint", options )
+   elseif (textInput1.text == "i") then
+      composer.showOverlay( "scopehint", options )
+   elseif (textInput4.text == "i") then
+      composer.showOverlay( "nestedhint", options )
+   end
+
 end
 
 function win()
@@ -264,6 +294,7 @@ function showText()
          y = display.contentCenterY+110,
          fontSize = 40
    }
+
    loopText1 = display.newText( loopText1Options )
    loopText1.alpha = 0
    transition.to( loopText1 , { time=1500, alpha=1 } )
@@ -310,6 +341,9 @@ function showInputs()
    submit.alpha=1
 end
 
+function scene:resumeGame()
+    --code to resume game
+end
 -- "scene:hide()"
 function scene:hide( event )
 

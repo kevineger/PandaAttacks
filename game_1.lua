@@ -2,6 +2,7 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 local analytics = require("gameAnal")
+local hintDetection = require("hint_mc")
 
 local coins = require("coins_data")
 coins.init()
