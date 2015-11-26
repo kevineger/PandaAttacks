@@ -23,7 +23,12 @@ function scene:create( event )
 	backgroundOverlay.isHitTestable = true
 	backgroundOverlay:addEventListener ("tap", dismissHint)
 
-	local typoString = "Verify the scope\n of the variable i."
+	local typoString = ""
+	if (math.random(100)%2 == 0) then
+		typoString = "Verify the scope\n of the variable i.\n(Tap to Dismiss)"
+	else 
+		typoString = "Consider instatiating the\nvariable i.\n(Tap to Dismiss)"
+	end
 
 	local options = {
 	    text = typoString,     

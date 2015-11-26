@@ -23,7 +23,12 @@ function scene:create( event )
 	backgroundOverlay.isHitTestable = true
 	backgroundOverlay:addEventListener ("tap", dismissHint)
 
-	local typoString = "Verify the structure of\nyour nested for loop."
+	local typoString = ""
+	if (math.random(100)%2 == 0) then
+		typoString = "Verify the structure of\nyour nested for loop.\n(Tap to Dismiss)"
+	else 
+		typoString = "Revise the use of variable\ni in the last line.\n(Tap to Dismiss)"
+	end
 
 	local options = {
 	    text = typoString,     
