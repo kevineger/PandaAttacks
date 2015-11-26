@@ -20,16 +20,15 @@ function goToGames(event)
 end
 
 
-function updateCoins()
-   if coins.load() == nil then
-      coins.set(5)
-      coinText.text = 5;
-   else
-      local coin_val = coins.load() + 5
-      coins.set(coin_val)
-      coinText.text = coin_val;
+function purchaseMC(event)
+   local cost = 15
+end
+
+function purchase(cost, item) 
+   local coins = coins.load()
+   if coins == nil then
+
    end
-   coins.save()
 end
 
 ---------------------------------------------------------------------------------
@@ -72,7 +71,7 @@ function scene:create( event )
    mc_life.x = 30
    mc_life.y = 250
 
-   local mc_cost_text = display.newText("30", 100, 505, native.systemFontBold, 40)
+   local mc_cost_text = display.newText("15", 100, 505, native.systemFontBold, 40)
    sceneGroup:insert(mc_cost_text)
 
    local mc_cost_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
@@ -103,7 +102,7 @@ function scene:create( event )
    highlight_life.x = display.contentWidth - 30
    highlight_life.y = 250
 
-   local highlight_cost_text = display.newText("30", display.contentWidth - 170, 505, native.systemFontBold, 40)
+   local highlight_cost_text = display.newText("15", display.contentWidth - 170, 505, native.systemFontBold, 40)
    sceneGroup:insert(highlight_cost_text)
 
    local highlight_cost_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
@@ -126,7 +125,7 @@ function scene:create( event )
    star_bkg.x = 30
    star_bkg.y = 770
 
-   local star_cost_text = display.newText("30", 80, 1010, native.systemFontBold, 40)
+   local star_cost_text = display.newText("10", 80, 1010, native.systemFontBold, 40)
    sceneGroup:insert(star_cost_text)
 
    local star_cost_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
@@ -141,7 +140,7 @@ function scene:create( event )
    gladys_green.x = display.contentCenterX
    gladys_green.y = 765
 
-   local gladys_cost_text = display.newText("30", display.contentCenterX - 35, 1010, native.systemFontBold, 40)
+   local gladys_cost_text = display.newText("20", display.contentCenterX - 35, 1010, native.systemFontBold, 40)
    sceneGroup:insert(gladys_cost_text)
 
    local gladys_cost_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
@@ -157,7 +156,7 @@ function scene:create( event )
    panda_level.x = display.contentWidth - 30
    panda_level.y = 765
 
-   local panda_level_text = display.newText("30", display.contentWidth - 170, 1010, native.systemFontBold, 40)
+   local panda_level_text = display.newText("15", display.contentWidth - 170, 1010, native.systemFontBold, 40)
    sceneGroup:insert(panda_level_text)
 
    local panda_level_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
@@ -192,6 +191,7 @@ function scene:show( event )
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
       back:addEventListener("tap", goToGames)
+      mc_life:addEventListener("tap", purchaseMC)
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -210,6 +210,7 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
       back:removeEventListener("tap", goToGames)
+      mc_life:removeEventListener("tap", purchaseMC)
       sceneGroup = nil
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
