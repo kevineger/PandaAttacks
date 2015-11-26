@@ -58,12 +58,113 @@ function scene:create( event )
    back.x = 130
    back.y = display.contentHeight - 60
 
-   -- Powerups Button
+   -- Powerups
    local powerups = display.newImageRect(sceneGroup, "assets/images/powerups.png",496,116)
-   powerups:scale(0.50, 0.50)
+   powerups:scale(0.75, 0.75)
    powerups.anchorX = 0
    powerups.x = 10
-   powerups.y = 175
+   powerups.y = 200
+
+   mc_life = display.newImageRect(sceneGroup, "assets/images/mc_heart.png",300,282)
+   mc_life:scale(0.80, 0.80)
+   mc_life.anchorY = 0
+   mc_life.anchorX = 0
+   mc_life.x = 30
+   mc_life.y = 250
+
+   local mc_cost_text = display.newText("30", 100, 505, native.systemFontBold, 40)
+   sceneGroup:insert(mc_cost_text)
+
+   local mc_cost_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
+   mc_cost_img:scale(0.30, 0.30)
+   mc_cost_img.anchorX = 0
+   mc_cost_img.x = 130
+   mc_cost_img.y = 505
+
+   blank_ans = display.newImageRect(sceneGroup, "assets/images/blank_life.png",300,288)
+   blank_ans:scale(0.80, 0.80)
+   blank_ans.anchorY = 0
+   blank_ans.x = display.contentCenterX
+   blank_ans.y = 250
+
+   local blank_cost_text = display.newText("30", display.contentCenterX - 30, 505, native.systemFontBold, 40)
+   sceneGroup:insert(blank_cost_text)
+
+   local blank_cost_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
+   blank_cost_img:scale(0.30, 0.30)
+   blank_cost_img.anchorX = 0
+   blank_cost_img.x = display.contentCenterX
+   blank_cost_img.y = 505
+
+   highlight_life = display.newImageRect(sceneGroup, "assets/images/highlight_heart.png",300,282)
+   highlight_life:scale(0.80, 0.80)
+   highlight_life.anchorY = 0
+   highlight_life.anchorX = 1
+   highlight_life.x = display.contentWidth - 30
+   highlight_life.y = 250
+
+   local highlight_cost_text = display.newText("30", display.contentWidth - 170, 505, native.systemFontBold, 40)
+   sceneGroup:insert(highlight_cost_text)
+
+   local highlight_cost_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
+   highlight_cost_img:scale(0.30, 0.30)
+   highlight_cost_img.anchorX = 0
+   highlight_cost_img.x = display.contentWidth - 140
+   highlight_cost_img.y = 505
+
+   -- Customize
+   local custom = display.newImageRect(sceneGroup, "assets/images/customize.png",527,116)
+   custom:scale(0.75, 0.75)
+   custom.anchorX = 0
+   custom.x = 10
+   custom.y = 700
+
+   star_bkg = display.newImageRect(sceneGroup, "assets/images/star_background_icon.png",217,269)
+   star_bkg:scale(0.80, 0.80)
+   star_bkg.anchorY = 0
+   star_bkg.anchorX = 0
+   star_bkg.x = 30
+   star_bkg.y = 770
+
+   local star_cost_text = display.newText("30", 80, 1010, native.systemFontBold, 40)
+   sceneGroup:insert(star_cost_text)
+
+   local star_cost_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
+   star_cost_img:scale(0.30, 0.30)
+   star_cost_img.anchorX = 0
+   star_cost_img.x = 110
+   star_cost_img.y = 1011
+
+   gladys_green = display.newImageRect(sceneGroup, "assets/images/green_gladys.png",220,323)
+   gladys_green:scale(0.70, 0.70)
+   gladys_green.anchorY = 0
+   gladys_green.x = display.contentCenterX
+   gladys_green.y = 765
+
+   local gladys_cost_text = display.newText("30", display.contentCenterX - 35, 1010, native.systemFontBold, 40)
+   sceneGroup:insert(gladys_cost_text)
+
+   local gladys_cost_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
+   gladys_cost_img:scale(0.30, 0.30)
+   gladys_cost_img.anchorX = 0
+   gladys_cost_img.x = display.contentCenterX
+   gladys_cost_img.y = 1011
+
+   panda_level = display.newImageRect(sceneGroup, "assets/images/panda_levels_icon.png",293,359)
+   panda_level:scale(0.60, 0.60)
+   panda_level.anchorY = 0
+   panda_level.anchorX = 1
+   panda_level.x = display.contentWidth - 30
+   panda_level.y = 765
+
+   local panda_level_text = display.newText("30", display.contentWidth - 170, 1010, native.systemFontBold, 40)
+   sceneGroup:insert(panda_level_text)
+
+   local panda_level_img = display.newImageRect(sceneGroup, "assets/images/coins.png",300,150)
+   panda_level_img:scale(0.30, 0.30)
+   panda_level_img.anchorX = 0
+   panda_level_img.x = display.contentWidth - 140
+   panda_level_img.y = 1011
 
    -- Set the coin display
    local curr_coins = coins.load()
