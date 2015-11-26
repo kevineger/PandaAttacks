@@ -32,7 +32,7 @@ local startTime = os.time(os.date('*t'))
 
 function checkAnswers()
    -- Options table for the overlay scene "pause.lua"
-   composer.hideOverlay( "hint" )
+   composer.hideOverlay( "typohint" )
    local typos = {}
 
    local complete = true;
@@ -91,7 +91,11 @@ function checkAnswers()
    }
 
    if (next(typos) ~= nil) then
-      composer.showOverlay( "hint", options )
+      composer.showOverlay( "typohint", options )
+   elseif (textInput1.text == "i") then
+      composer.showOverlay( "scopehint", options )
+   elseif (textInput4.text == "i") then
+      composer.showOverlay( "nestedhint", options )
    end
 
 end
