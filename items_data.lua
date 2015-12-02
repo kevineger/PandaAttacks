@@ -6,11 +6,20 @@ I.items = {}  -- Set the user to initally have no items
 
 function I.init()
    I.filename = "items19.txt"
+   local load = I.load()
+   if load ~= nil then
+      I.items = load
+   else
+      I.items = {}
+   end
+
    return I.items
 end
 
 function I.purchase( item )
-   I.items[item] = true;
+   
+
+   I.items[item] = true
 end
 
 function I.get()
@@ -27,6 +36,7 @@ function I.save()
 
    if ( file ) then
       local contents = json.encode( I.items )
+      print(contents)
       file:write( contents )
       io.close( file )
       return true

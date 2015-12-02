@@ -68,7 +68,8 @@ function purchase(cost, item)
       paramsTable["msg"] = "Success! You purchased the item!"
       paramsTable["height"] = 200
       showPopup(paramsTable) 
-      items.purchase(item);
+      print(items.load())
+      items.purchase(item)
       items.save()
       coins.set(userCoins - cost)
       coins.save()
