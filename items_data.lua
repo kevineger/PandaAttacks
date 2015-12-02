@@ -17,8 +17,6 @@ function I.init()
 end
 
 function I.purchase( item )
-   
-
    I.items[item] = true
 end
 

@@ -23,7 +23,6 @@ local centerX = display.contentCenterX
 local centerY = display.contentCenterY
 local currScore = 0
 local total = 4
-local lives = 3
 local questionNum = 1
 local errorsFound = {}
 
@@ -200,15 +199,6 @@ function scene:create( event )
    scoreDisplay = display.newText(sceneGroup, currScore, display.contentWidth-120, display.contentHeight-100, native.systemFont, 50)
    local totalDisplay = display.newText(sceneGroup,"/"..total, display.contentWidth-80, display.contentHeight-100, native.systemFont, 50)
 
-   heart = {}
-
-   local x = centerX - 100
-   for i = 1, 3 do
-      heart[i] = display.newImage(sceneGroup, "assets/images/life.png", x, display.contentHeight-100)
-      heart[i]:scale(2,2)
-      x = x + 100
-   end
-
    -- Set the coin display
    local curr_coins = coins.load()
    if curr_coins == nil then
@@ -253,6 +243,25 @@ function scene:show( event )
        background.x = display.contentCenterX
        background.y = display.contentHeight
        sceneGroup:insert(1, background)
+
+      heart = {}
+
+      local x = centerX - 100
+
+      lives = 3
+
+      if loadItems ~= nil and loadItems["highlight_life"] ~= nil and loadItems["highlight_life"] ~= false then
+         lives = 4
+         x = centerX - 150
+         items.spend("highlight_life")
+         items.save()
+      end
+
+      for i = 1, lives do
+         heart[i] = display.newImage(sceneGroup, "assets/images/life.png", x, display.contentHeight-100)
+         heart[i]:scale(2,2)
+         x = x + 100
+      end
 
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
