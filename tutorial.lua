@@ -1,6 +1,9 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+local items = require("items_data")
+items.init()
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -18,14 +21,6 @@ end
 function scene:create( event )
 
    local sceneGroup = self.view
-
-   -- Set the background
-   background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
-   background.anchorX = 0.5
-   background.anchorY = 1
-   -- Place background image in center of screen
-   background.x = display.contentCenterX
-   background.y = display.contentHeight
 
    local introTextOptions = {
          text = 'Panda Attacks is an educational game that focuses on iterative learning. You will always be prompted on what to do at each stage of the game. To see an overview of the two mini-games, navigate using the buttons below.',
@@ -53,6 +48,22 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+
+      local loadItems = items.load()
+      
+      if loadItems ~= nil and loadItems["star_bkg"] ~= nil then
+        background = display.newImageRect(sceneGroup, "assets/images/star_background.jpg",900,1425)
+      else
+        background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
+      end
+       
+       background.anchorX = 0.5
+       background.anchorY = 1
+       -- Place background image in center of screen
+       background.x = display.contentCenterX
+       background.y = display.contentHeight
+       sceneGroup:insert(1, background)
+
    elseif ( phase == "did" ) then
       transition.to( introText , { time=1500, alpha=1 } )
       nextBtn:addEventListener("tap", nextTutorial)

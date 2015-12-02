@@ -4,6 +4,9 @@ local scene = composer.newScene()
 local coins = require("coins_data")
 coins.init()
 
+local items = require("items_data")
+items.init()
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -11,24 +14,82 @@ coins.init()
 
 -- local forward references should go here
 function goToGames(event)
-   local options =
-   {
+   local options = {
        effect = "crossFade",
        time = 400,
    }
    composer.gotoScene("select", options)
 end
 
-
 function purchaseMC(event)
    local cost = 15
+   purchase(cost, "mc_life")
+end
+
+function purchaseBlank(event)
+   local cost = 30
+   purchase(cost, "blank_ans")
+end
+
+function purchaseHighlight(event)
+   local cost = 15
+   purchase(cost, "highlight_life")
+end
+
+function purchaseStar(event)
+   local cost = 10
+   purchase(cost, "star_bkg")
+end
+
+function purchaseGladys(event)
+   local cost = 20
+   purchase(cost, "green_gladys")
+end
+
+function purchasePanda(event)
+   local cost = 15
+   purchase(cost, "panda_level")
 end
 
 function purchase(cost, item) 
-   local coins = coins.load()
-   if coins == nil then
-
+   local userCoins = coins.load()
+   if userCoins == nil then
+      paramsTable = {}
+      paramsTable["msg"] = "You have no coins! Play a game to earn coins!"
+      paramsTable["height"] = 200
+      showPopup(paramsTable)  
+   elseif userCoins < cost then
+      paramsTable = {}
+      paramsTable["msg"] = "You don't have enough coins to purchase that item. Play a game to earn more coins!"
+      paramsTable["height"] = 300
+      showPopup(paramsTable)  
+   elseif userCoins >= cost then
+      paramsTable = {}
+      paramsTable["msg"] = "Success! You purchased the item!"
+      paramsTable["height"] = 200
+      showPopup(paramsTable) 
+      items.purchase(item);
+      items.save()
+      coins.set(userCoins - cost)
+      coins.save()
+      coinText.text = userCoins - cost
    end
+
+end
+
+function showPopup(paramsTable)
+   local options = {
+      isModal = true,
+      effect = "fade",
+      time = 400,
+      params = paramsTable
+   }
+
+   composer.showOverlay( "purchase_popup", options )   
+end
+
+function scene:resumeGame()
+    --code to resume game
 end
 
 ---------------------------------------------------------------------------------
@@ -37,15 +98,6 @@ end
 function scene:create( event )
 
    local sceneGroup = self.view
-
-   -- Initialize the scene here.
-   -- Set the background
-   background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
-   background.anchorX = 0.5
-   background.anchorY = 1
-   -- Place background image in center of screen
-   background.x = display.contentCenterX
-   background.y = display.contentHeight
 
    -- Store Title 
    store = display.newImageRect(sceneGroup, "assets/images/store.png",285,116)
@@ -192,6 +244,26 @@ function scene:show( event )
       -- Called when the scene is still off screen (but is about to come on screen).
       back:addEventListener("tap", goToGames)
       mc_life:addEventListener("tap", purchaseMC)
+      blank_ans:addEventListener("tap", purchaseBlank)
+      highlight_life:addEventListener("tap", purchaseHighlight)
+      star_bkg:addEventListener("tap", purchaseStar)
+      gladys_green:addEventListener("tap", purchaseGladys)
+      panda_level:addEventListener("tap", purchasePanda)
+
+      local loadItems = items.load()
+      if loadItems ~= nil and loadItems["star_bkg"] ~= nil then
+        background = display.newImageRect(sceneGroup, "assets/images/star_background.jpg",900,1425)
+      else
+        background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
+      end
+       
+       background.anchorX = 0.5
+       background.anchorY = 1
+       -- Place background image in center of screen
+       background.x = display.contentCenterX
+       background.y = display.contentHeight
+       sceneGroup:insert(1, background)
+
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -211,6 +283,11 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
       back:removeEventListener("tap", goToGames)
       mc_life:removeEventListener("tap", purchaseMC)
+      blank_ans:removeEventListener("tap", purchaseBlank)
+      highlight_life:removeEventListener("tap", purchaseHighlight)
+      star_bkg:removeEventListener("tap", purchaseStar)
+      gladys_green:removeEventListener("tap", purchaseGladys)
+      panda_level:removeEventListener("tap", purchasePanda)
       sceneGroup = nil
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.

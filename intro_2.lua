@@ -1,6 +1,8 @@
-
 local composer = require( "composer" )
 local scene = composer.newScene()
+
+local items = require("items_data")
+items.init()
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -64,28 +66,6 @@ function scene:create( event )
 
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-   
-   local background = display.newImageRect("assets/images/splashBg.jpg",900,1425)
-   background.anchorX = 0.5
-   background.anchorY = 1
-   -- Place background image in center of screen
-   background.x = display.contentCenterX
-   background.y = display.contentHeight
-   sceneGroup:insert(background)
-
-   local gladys_options = {
-      width = 420,
-      height = 420,
-      numFrames = 3
-   }
-
-   local gladysSheet = graphics.newImageSheet( "assets/images/gladys_sprite.png", gladys_options )
-   local gladys = display.newSprite( gladysSheet, { name="gladys", start=1, count=3, time=1000 } )
-   gladys:scale(1.4, 1.4)
-   gladys.x = 280 
-   gladys.y = display.contentHeight - 275
-   gladys:play()
-   sceneGroup:insert(gladys)
 
    continue = display.newImageRect("assets/images/continue.png",431,116)
    continue:scale(0.7, 0.7)
@@ -113,6 +93,41 @@ function scene:show( event )
       -- Called when the scene is still off screen (but is about to come on screen).
       continue:addEventListener("tap", nextScene)
       home:addEventListener("tap", goHome)
+
+      local loadItems = items.load()
+
+      if loadItems ~= nil and loadItems["star_bkg"] ~= nil then
+        background = display.newImageRect(sceneGroup, "assets/images/star_background.jpg",900,1425)
+      else
+        background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
+      end
+       
+       background.anchorX = 0.5
+       background.anchorY = 1
+       -- Place background image in center of screen
+       background.x = display.contentCenterX
+       background.y = display.contentHeight
+       sceneGroup:insert(1, background)
+
+     local gladys_options = {
+        width = 420,
+        height = 420,
+        numFrames = 3
+     }
+
+     if loadItems ~= nil and loadItems["green_gladys"] ~= nil then
+        gladysSheet = graphics.newImageSheet("assets/images/gladys_sprite_custom.png",gladys_options)
+     else
+        gladysSheet = graphics.newImageSheet( "assets/images/gladys_sprite.png", gladys_options )
+     end
+
+     local gladys = display.newSprite( gladysSheet, { name="gladys", start=1, count=3, time=1000 } )
+     gladys:scale(1.4, 1.4)
+     gladys.x = 280 
+     gladys.y = display.contentHeight - 275
+     gladys:play()
+     sceneGroup:insert(gladys)
+      
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -151,11 +166,10 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
       continue:removeEventListener("tap", nextScene)
-      sceneGroup = nil
-      home:removeEventListener("tap", goHome)     
-      -- if introtext then introtext:removeSelf() end
-      introtext = nil
+      home:removeEventListener("tap", goHome)
       timer.cancel(dialogTimer)
+      sceneGroup = nil
+      introtext = nil
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end

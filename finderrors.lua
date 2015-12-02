@@ -6,6 +6,9 @@ local analytics = require("gameAnal")
 local coins = require("coins_data")
 coins.init()
 
+local items = require("items_data")
+items.init()
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -172,12 +175,6 @@ function scene:create( event )
    analytics.reset()
 
    print(analytics.getIncorrectAnswerG2())
-   background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
-   background.anchorX = 0.5
-   background.anchorY = 1
-   -- Place background image in center of screen
-   background.x = display.contentCenterX
-   background.y = display.contentHeight
 
    local introOptions = {
    text = "Find the errors in the code given below.",
@@ -241,6 +238,21 @@ function scene:show( event )
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
       setQuestion()
+
+      local loadItems = items.load()
+      
+      if loadItems ~= nil and loadItems["star_bkg"] ~= nil then
+        background = display.newImageRect(sceneGroup, "assets/images/star_background.jpg",900,1425)
+      else
+        background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
+      end
+       
+       background.anchorX = 0.5
+       background.anchorY = 1
+       -- Place background image in center of screen
+       background.x = display.contentCenterX
+       background.y = display.contentHeight
+       sceneGroup:insert(1, background)
 
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.

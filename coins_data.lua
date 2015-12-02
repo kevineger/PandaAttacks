@@ -9,7 +9,6 @@ end
 
 function C.set( value )
    C.coins = value
-   --C.coinsText.text = string.format( C.format, C.coins )
 end
 
 function C.get()
@@ -18,7 +17,6 @@ end
 
 function C.add( amount )
    C.coins = C.coins + amount
-   --C.coinsText.text = string.format( C.format, C.coins )
 end
 
 function C.save()

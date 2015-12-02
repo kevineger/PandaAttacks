@@ -1,6 +1,8 @@
-
 local composer = require( "composer" )
 local scene = composer.newScene()
+
+local items = require("items_data")
+items.init()
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -18,7 +20,7 @@ function goHome(event)
        effect = "crossFade",
        time = 400,
    }
-   composer.gotoScene("home", options)
+   composer.gotoScene("start", options)
 end
 
 function nextScene(event)
@@ -68,28 +70,6 @@ function scene:create( event )
 
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-   
-   local background = display.newImageRect("assets/images/splashBg.jpg",900,1425)
-   background.anchorX = 0.5
-   background.anchorY = 1
-   -- Place background image in center of screen
-   background.x = display.contentCenterX
-   background.y = display.contentHeight
-   sceneGroup:insert(background)
-
-   local sprite_options = {
-      width = 719,
-      height = 576,
-      numFrames = 9
-   }
-
-   local spriteSheet = graphics.newImageSheet( "assets/images/winning_2.png", sprite_options )
-   local sprite = display.newSprite( spriteSheet, { name="sprite", start=1, count=9, time=1000 } )
-   sprite:scale(1.3, 1.3)
-   sprite.x = display.contentCenterX
-   sprite.y = display.contentCenterY + 170
-   sprite:play()
-   sceneGroup:insert(sprite)
 
    continue = display.newImageRect("assets/images/continue.png",431,116)
    continue:scale(0.7, 0.7)
@@ -117,6 +97,42 @@ function scene:show( event )
       -- Called when the scene is still off screen (but is about to come on screen).
       continue:addEventListener("tap", nextScene)
       home:addEventListener("tap", goHome)
+
+
+    local loadItems = items.load()
+    
+    local sprite_options = {
+        width = 719,
+        height = 576,
+        numFrames = 9
+    }
+
+    if loadItems ~= nil and loadItems["green_gladys"] ~= nil then
+        spriteSheet = graphics.newImageSheet( "assets/images/winning_2_custom.png", sprite_options )
+    else
+        spriteSheet = graphics.newImageSheet( "assets/images/winning_2.png", sprite_options )
+    end
+
+    local sprite = display.newSprite( spriteSheet, { name="sprite", start=1, count=9, time=1000 } )
+    sprite:scale(1.3, 1.3)
+    sprite.x = display.contentCenterX
+    sprite.y = display.contentCenterY + 170
+    sprite:play()
+    sceneGroup:insert(sprite)
+
+    if loadItems ~= nil and loadItems["star_bkg"] ~= nil then
+      background = display.newImageRect(sceneGroup, "assets/images/star_background.jpg",900,1425)
+    else
+      background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
+    end
+
+    background.anchorX = 0.5
+    background.anchorY = 1
+    -- Place background image in center of screen
+    background.x = display.contentCenterX
+    background.y = display.contentHeight
+    sceneGroup:insert(1, background)
+
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
