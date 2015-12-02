@@ -67,22 +67,6 @@ function scene:create( event )
    play.x = display.contentCenterX
    play.y = 400
 
-   -- Adds level one icon
-   levelOne = display.newImageRect(sceneGroup, "assets/images/levelOneGrey.png",700,700)
-   levelOne:scale(0.5, 0.5)
-   levelOne.anchorX = 0.5
-   levelOne.anchorY = 1
-   levelOne.x = display.contentCenterX - 150
-   levelOne.y = display.contentHeight - 500
-
-   -- Adds level two icon
-   levelTwo = display.newImageRect(sceneGroup, "assets/images/levelTwoGrey.png",700,700)
-   levelTwo:scale(0.5, 0.5)
-   levelTwo.anchorX = 0.5
-   levelTwo.anchorY = 1
-   levelTwo.x = display.contentCenterX + 150
-   levelTwo.y = display.contentHeight - 500
-
    -- Home Button
    home = display.newImageRect(sceneGroup, "assets/images/home.png",370,370)
    home:scale(0.5, 0.5)
@@ -120,11 +104,7 @@ function scene:show( event )
    local phase = event.phase
 
    if ( phase == "will" ) then
-      -- Called when the scene is still off screen (but is about to come on screen).
-      levelOne:addEventListener("tap", goToGameOne)
-      levelTwo:addEventListener("tap", goToGameTwo)
-      home:addEventListener("tap", goHome)
-      store:addEventListener("tap", goToStore)
+      -- Called when the scene is still off screen (but is about to come on screen)
 
       local loadItems = items.load()
       
@@ -134,13 +114,38 @@ function scene:show( event )
         background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
       end
        
-       background.anchorX = 0.5
-       background.anchorY = 1
-       -- Place background image in center of screen
-       background.x = display.contentCenterX
-       background.y = display.contentHeight
-       sceneGroup:insert(1, background)
+      background.anchorX = 0.5
+      background.anchorY = 1
+      -- Place background image in center of screen
+      background.x = display.contentCenterX
+      background.y = display.contentHeight
+      sceneGroup:insert(1, background)
 
+      -- Adds level one icon
+      if loadItems ~= nil and loadItems["panda_level"] ~= nil then
+        levelOne = display.newImageRect(sceneGroup, "assets/images/levelOnePanda.png",700,700)
+        levelTwo = display.newImageRect(sceneGroup, "assets/images/levelTwoPanda.png",700,700)
+      else
+        levelOne = display.newImageRect(sceneGroup, "assets/images/levelOneGrey.png",700,700)
+        levelTwo = display.newImageRect(sceneGroup, "assets/images/levelTwoGrey.png",700,700)
+      end
+
+      levelOne:scale(0.5, 0.5)
+      levelOne.anchorX = 0.5
+      levelOne.anchorY = 1
+      levelOne.x = display.contentCenterX - 150
+      levelOne.y = display.contentHeight - 500
+
+      levelTwo:scale(0.5, 0.5)
+      levelTwo.anchorX = 0.5
+      levelTwo.anchorY = 1
+      levelTwo.x = display.contentCenterX + 150
+      levelTwo.y = display.contentHeight - 500
+
+      levelOne:addEventListener("tap", goToGameOne)
+      levelTwo:addEventListener("tap", goToGameTwo)
+      home:addEventListener("tap", goHome)
+      store:addEventListener("tap", goToStore)
 
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
