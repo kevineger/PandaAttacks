@@ -123,24 +123,38 @@ function scene:show( event )
 
       -- Adds level one icon
       if loadItems ~= nil and loadItems["panda_level"] ~= nil then
+        levelOne = nil
+        levelTwo = nil
+
         levelOne = display.newImageRect(sceneGroup, "assets/images/levelOnePanda.png",700,700)
         levelTwo = display.newImageRect(sceneGroup, "assets/images/levelTwoPanda.png",700,700)
+
+        levelOne:scale(0.5, 0.5)
+        levelOne.anchorX = 0.5
+        levelOne.anchorY = 1
+        levelOne.x = display.contentCenterX - 150
+        levelOne.y = display.contentHeight - 500
+
+        levelTwo:scale(0.5, 0.5)
+        levelTwo.anchorX = 0.5
+        levelTwo.anchorY = 1
+        levelTwo.x = display.contentCenterX + 150
+        levelTwo.y = display.contentHeight - 500
       else
         levelOne = display.newImageRect(sceneGroup, "assets/images/levelOneGrey.png",700,700)
         levelTwo = display.newImageRect(sceneGroup, "assets/images/levelTwoGrey.png",700,700)
+        levelOne:scale(0.40, 0.40)
+        levelOne.anchorX = 0.5
+        levelOne.anchorY = 1
+        levelOne.x = display.contentCenterX - 150
+        levelOne.y = display.contentHeight - 550
+
+        levelTwo:scale(0.4, 0.4)
+        levelTwo.anchorX = 0.5
+        levelTwo.anchorY = 1
+        levelTwo.x = display.contentCenterX + 150
+        levelTwo.y = display.contentHeight - 550    
       end
-
-      levelOne:scale(0.5, 0.5)
-      levelOne.anchorX = 0.5
-      levelOne.anchorY = 1
-      levelOne.x = display.contentCenterX - 150
-      levelOne.y = display.contentHeight - 500
-
-      levelTwo:scale(0.5, 0.5)
-      levelTwo.anchorX = 0.5
-      levelTwo.anchorY = 1
-      levelTwo.x = display.contentCenterX + 150
-      levelTwo.y = display.contentHeight - 500
 
       levelOne:addEventListener("tap", goToGameOne)
       levelTwo:addEventListener("tap", goToGameTwo)

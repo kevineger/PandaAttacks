@@ -2,7 +2,7 @@
 local M = {}
 M.consent = false; -- set the inital consent to be false
 function M.init()
-	 M.filename = "consent.txt"
+	 M.filename = "consent3.txt"
 end
 
 function M.set( value )
