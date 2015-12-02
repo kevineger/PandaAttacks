@@ -67,14 +67,30 @@ end
 
 function checkAnswer(event)
    print ("Selected answer: " .. event.target.id)
+   
+   local loadItems = items.load()
+
    if ( event.target.id == 1 ) then
       analytics.correctAnswerG1()
       updateCoins()
       nextLevel()
    else
       if incorrect then
-         analytics.incorrectAnswerG1()
-         gameOver()
+         print(paramsTable)
+         if loadItems ~= nil and loadItems["mc_life"] ~= nil and loadItems["mc_life"] ~= false and paramsTable == nil then
+            analytics.incorrectAnswerG1()
+            paramsTable = {}
+            paramsTable["msg"] = "Uh oh, wrong again! Thanks to your powerup you have one more chance!"
+            paramsTable["height"] = 300
+            showPopup(paramsTable) 
+            items.spend("mc_life")
+            items.save()
+            event.target:setFillColor(black)
+         else
+            analytics.incorrectAnswerG1()
+            paramsTable = nil
+            gameOver()
+         end
       else
          analytics.incorrectAnswerG1()
          event.target:setFillColor(black)
@@ -98,6 +114,21 @@ function flashPanda()
    incorrectPanda.x = display.contentWidth - 80
    incorrectPanda.y = display.contentHeight - math.random(100, 800)
    incorrectPanda.rotation = 300
+end
+
+function showPopup(paramsTable)
+   local options = {
+      isModal = true,
+      effect = "fade",
+      time = 400,
+      params = paramsTable
+   }
+
+   composer.showOverlay( "bonus_popup", options )   
+end
+
+function scene:resumeGame()
+    --code to resume game
 end
 
 -- set typewriter font depending on device

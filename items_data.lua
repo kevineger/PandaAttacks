@@ -5,7 +5,7 @@ local I = {}  -- Create the local module table (this will hold our functions and
 I.items = {}  -- Set the user to initally have no items
 
 function I.init()
-   I.filename = "items19.txt"
+   I.filename = "items20.txt"
    local load = I.load()
    if load ~= nil then
       I.items = load
