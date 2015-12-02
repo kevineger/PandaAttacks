@@ -346,6 +346,14 @@ function showInputs()
    textInput1 = native.newTextField( display.contentCenterX-220, display.contentCenterY-136, 90, 50 )
    textInput2 = native.newTextField( display.contentCenterX+110, display.contentCenterY-136, 121, 50 )
    textInput3 = native.newTextField( display.contentCenterX+320, display.contentCenterY-88+50, 90, 50 )
+   local loadItems = items.load()
+
+   if loadItems ~= nil and loadItems["blank_ans"] ~= nil and loadItems["blank_ans"] ~= false then
+      textInput3.text = 'k++){'
+      textInput3:setTextColor(0,0,0)
+      items.spend("blank_ans")
+      items.save()
+   end
    textInput4 = native.newTextField( display.contentCenterX+235, display.contentCenterY-38+50, 30, 50 )
    submit.alpha=1
 end
