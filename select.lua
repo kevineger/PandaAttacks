@@ -7,6 +7,7 @@ coins.init()
 local items = require("items_data")
 items.init()
 
+local score = require("score")
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -48,6 +49,15 @@ function goToGameTwo(event)
        time = 400,
    }
    composer.gotoScene("finderrors", options)
+end
+
+function goToCreateQ() 
+  local options =
+   {
+       effect = "crossFade",
+       time = 400,
+   }
+   composer.gotoScene("createQuestion", options)
 end
 
 ---------------------------------------------------------------------------------
@@ -95,6 +105,15 @@ function scene:create( event )
    money.x = display.contentWidth - 105
    money.y = display.contentHeight - 60
    sceneGroup:insert(money)
+
+   --adds create question button
+   if(topPlayer) then
+   createQ = display.newImageRect(sceneGroup, "assets/images/create_questions.png", 300, 150)
+   createQ.x = display.contentCenterX
+   createQ.y = display.contentCenterY+400
+   createQ:addEventListener("tap", goToCreateQ)
+   sceneGroup:insert(createQ)
+  end
 end
 
 -- "scene:show()"

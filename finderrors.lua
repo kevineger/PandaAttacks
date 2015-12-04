@@ -88,7 +88,7 @@ local function clickError( event )
       if lives == 0 then
          -- analytics.sendErrorsFound(errorsFound)
          -- analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "lose", ["startTime"] = startTime, ["endTime"] = endTime})
-         analytics.sendToParse("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["totalPercent"] = analytics.getTotalPercentG2()})
+         analytics.sendToParse("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["totalPercent"] = analytics.getScorePercentG2()})
          composer.gotoScene("losing_2")
       elseif lives >= 1 then
          heart[lives]:removeSelf()
@@ -102,15 +102,9 @@ local function clickError( event )
       --questionNum = questionNum + 1
       --questionDisplay.text = questionNum
       endTime = os.time(os.date('*t'))
-<<<<<<< HEAD
-      -- analytics.sendErrorsFound(errorsFound)
-      -- analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
-      analytics.sendToParse("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["totalPercent"] = analytics.getTotalPercentG2()})
-=======
       analytics.sendErrorsFound(errorsFound)
       analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
       updateCoins()
->>>>>>> de56a1204cc2c3dee5abc655c712e90e1893b0e9
       goToWin()
 
    end
@@ -201,7 +195,6 @@ function scene:create( event )
    circle.strokeWidth = 3
 
    questionDisplay = display.newText(sceneGroup, questionNum, 75, 75, native.systemFont, 50)
-
 
    scoreDisplay = display.newText(sceneGroup, currScore, display.contentWidth-120, display.contentHeight-100, native.systemFont, 50)
    local totalDisplay = display.newText(sceneGroup,"/"..total, display.contentWidth-80, display.contentHeight-100, native.systemFont, 50)

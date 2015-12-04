@@ -1,5 +1,5 @@
 local composer = require( "composer" )
-
+local analytics = require("gameAnal")
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------------------------------------

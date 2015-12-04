@@ -20,6 +20,9 @@ local function addScore()
    {
        effect = "crossFade",
        time = 400,
+       params = {
+            username = userInput.text
+        }
    }
     composer.gotoScene("scoreboard_2", options)
 end
@@ -66,10 +69,6 @@ function scene:create( event )
     skip.x = centerX+125
     skip.y = 400
     skip:addEventListener("tap", skipScore)
-
-
-
-
 end
 
 

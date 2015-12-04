@@ -29,7 +29,7 @@ function nextScene(event)
        effect = "crossFade",
        time = 400,
    }
-   composer.gotoScene("select", options)
+   composer.gotoScene("enterScore_2", options)
 end
 
 ---------------------------------------------------------------------------------

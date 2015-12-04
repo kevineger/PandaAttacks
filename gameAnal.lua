@@ -8,8 +8,8 @@ local g1Correct = 0
 local g1Total = 0
 
 local g2Incorrect = 0
-local g2Correct = 4
-local g2Total = 4
+local g2Correct = 2
+local g2Total = 6
 
 parse:init({
 	appId = envVars.appId,
@@ -129,21 +129,6 @@ end
 function D.getScorePercentG2()
 	return g2Correct/g2Total
 end
-function D.getScoresG2()
-	local user_object_id = A_USER_OBJECT_ID
-	--'order=-score'
-	--'where={"score":{"$exists":false}}'
-	--local query = { ["where"] = { ["player"] = { ["__type"] = "Pointer", ["className"] = parse.USER_CLASS, ["objectId"] = user_object_id } } }
-	-- 'limit=200'
-	local query = { ["order"] = "-scorePercent", ["limit"] = "5" }
-
-	parse:getObjects( "score_2", query, function(e)
-		for i=1, #e.results do
-			score_data = e.results[i]
-			print( score_data.correct, score_data.total, score_data.username )
-		end
-	end)
-end
 
 -- function sends game analytics to parse
 function D.sendToParse(parseTable, values)
@@ -182,6 +167,13 @@ function D.reset()
 	g2Incorrect = 0
 	g2Correct = 0
 	g2Total = 0
+end
+
+function D.getQNum()
+	local query = { ["order"] = "-num", ["limit"] = "1" }
+	parse:getObjects( "questions_2", query, function(e)
+		 qnum = e.results[1].num
+	end)
 end
 
 return D
