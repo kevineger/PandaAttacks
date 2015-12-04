@@ -2,7 +2,13 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 local analytics = require("gameAnal")
+local typoDetection = require("typo_detection")
 
+local coins = require("coins_data")
+coins.init()
+
+local items = require("items_data")
+items.init()
 
 question_generator = require ("questionGenerators.question2_generator")
 
@@ -30,49 +36,87 @@ end
 local startTime = os.time(os.date('*t'))
 
 function checkAnswers()
+   -- Options table for the overlay scene "pause.lua"
+   composer.hideOverlay( "typohint" )
+   local typos = {}
+
    local complete = true;
    if ( textInput1.text == "int i" ) then  
       textInput1:setTextColor( 0, 138, 46 )
    else
       complete = false
-      --analytics.checkForTypo("int i", textInput1.text)
+
+      if (typoDetection.isTypo("int i", textInput1.text, 2)) then
+         typos[#typos + 1] =  textInput1.text
+      end
+
       textInput1:setTextColor( 204, 0, 0 )
    end
    if ( textInput2.text == "length()" ) then
       textInput2:setTextColor( 0, 138, 46 )
    else
       complete = false
-      --analytics.checkForTypo("length()", textInput2.text)
+
+      if (typoDetection.isTypo("length()", textInput2.text, 3)) then
+         typos[#typos + 1] =  textInput2.text
+      end
+
       textInput2:setTextColor( 204, 0, 0 )
    end
    if ( textInput3.text == "k++){" ) then 
       textInput3:setTextColor( 0, 138, 46 )
    else
       complete = false
-      --analytics.checkForTypo("k++){", textInput3.text)
+
+      if (typoDetection.isTypo("k++){", textInput3.text, 3)) then
+         typos[#typos + 1] =  textInput3.text
+      end
+
       textInput3:setTextColor( 204, 0, 0 )
    end
    if ( textInput4.text == "k" ) then 
       textInput4:setTextColor( 0, 138, 46 )
    else
       complete = false
-      --analytics.checkForTypo("k", textInput4.text)
+
+      if (typoDetection.isTypo("k", textInput4.text, 0)) then
+         typos[#typos + 1] =  textInput4.text
+      end
+
       textInput4:setTextColor( 204, 0, 0 )
    end
    -- complete = true
    if complete then
       local endTime = os.time(os.date('*t'))
-      --analytics.correctAnswerG1()
-      --analytics.sendToParse("game_1", {["incorrect"] = analytics.getIncorrectAnswerG1(), ["correct"] = analytics.getCorrectAnswerG1(), ["total"] = analytics.getTotalAnswerG1(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
+      analytics.correctAnswerG1()
+      analytics.sendToParse("game_1", {["incorrect"] = analytics.getIncorrectAnswerG1(), ["correct"] = analytics.getCorrectAnswerG1(), ["total"] = analytics.getTotalAnswerG1(), ["gameResult"] = "win", ["startTime"] = startTime, ["endTime"] = endTime})
+      updateCoins()
+
       win()
    else
      --analytics.incorrectAnswerG1()
    end
+
+   -- Show hint if Typo
+   local options = {
+      isModal = true,
+      effect = "fade",
+      time = 400,
+      params = typos
+   }
+
+   if (next(typos) ~= nil) then
+      composer.showOverlay( "typohint", options )
+   elseif (textInput1.text == "i") then
+      composer.showOverlay( "scopehint", options )
+   elseif (textInput4.text == "i") then
+      composer.showOverlay( "nestedhint", options )
+   end
+
 end
 
 function win()
-   --analytics.updateTotal("game_1_3", "goYQo4jfYF", "game_2_plays")
-   
+   analytics.updateTotal("game_1_3", "goYQo4jfYF", "game_2_plays")
    questionText:removeSelf()
    loopText1:removeSelf()
    loopText2:removeSelf()
@@ -119,6 +163,18 @@ function setFont()
     return customFont
 end
 
+function updateCoins()
+   if coins.load() == nil then
+      coins.set(5)
+      coinText.text = 5;
+   else
+      local coin_val = coins.load() + 5
+      coins.set(coin_val)
+      coinText.text = coin_val;
+   end
+   coins.save()
+end
+
 ---------------------------------------------------------------------------------
 
 -- "scene:create()"
@@ -127,14 +183,6 @@ function scene:create( event )
    local sceneGroup = self.view
    typeWriterFont = setFont()
 
-   -- Set the background
-   background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
-   background.anchorX = 0.5
-   background.anchorY = 1
-   -- Place background image in center of screen
-   background.x = display.contentCenterX
-   background.y = display.contentHeight
-
    submit = display.newImageRect(sceneGroup, "assets/images/submit.png",480,144)
    submit.alpha = 0
    submit:scale(0.5, 0.5)
@@ -142,6 +190,22 @@ function scene:create( event )
    submit.anchorY = 1
    submit.x = display.contentCenterX
    submit.y = display.contentCenterY+130
+
+   -- Set the coin display
+   local curr_coins = coins.load()
+   if curr_coins == nil then
+      coinText = display.newText(0, 115, display.contentHeight - 45, native.systemFontBold, 40)
+   else
+      coinText = display.newText(curr_coins, 115, display.contentHeight - 45, native.systemFontBold, 40)
+   end
+   sceneGroup:insert(coinText)
+
+   -- Add the money bag
+   local money = display.newImageRect(sceneGroup, "assets/images/money.png", 200, 272)
+   money:scale(0.4, 0.4)
+   money.x = 50
+   money.y = display.contentHeight - 60
+   sceneGroup:insert(money)
 end
 
 -- "scene:show()"
@@ -162,6 +226,20 @@ function scene:show( event )
          fontSize = 45
       }
       questionText = display.newText( questionOptions )
+
+      local loadItems = items.load()
+      if loadItems ~= nil and loadItems["star_bkg"] ~= nil then
+        background = display.newImageRect(sceneGroup, "assets/images/star_background.jpg",900,1425)
+      else
+        background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
+      end
+       
+       background.anchorX = 0.5
+       background.anchorY = 1
+       -- Place background image in center of screen
+       background.x = display.contentCenterX
+       background.y = display.contentHeight
+       sceneGroup:insert(1, background)
 
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
@@ -233,6 +311,7 @@ function showText()
          y = display.contentCenterY+110,
          fontSize = 40
    }
+
    loopText1 = display.newText( loopText1Options )
    loopText1.alpha = 0
    transition.to( loopText1 , { time=1500, alpha=1 } )
@@ -275,10 +354,21 @@ function showInputs()
    textInput1 = native.newTextField( display.contentCenterX-220, display.contentCenterY-136, 90, 50 )
    textInput2 = native.newTextField( display.contentCenterX+110, display.contentCenterY-136, 121, 50 )
    textInput3 = native.newTextField( display.contentCenterX+320, display.contentCenterY-88+50, 90, 50 )
+   local loadItems = items.load()
+
+   if loadItems ~= nil and loadItems["blank_ans"] ~= nil and loadItems["blank_ans"] ~= false then
+      textInput3.text = 'k++){'
+      textInput3:setTextColor(0,0,0)
+      items.spend("blank_ans")
+      items.save()
+   end
    textInput4 = native.newTextField( display.contentCenterX+235, display.contentCenterY-38+50, 30, 50 )
    submit.alpha=1
 end
 
+function scene:resumeGame()
+    --code to resume game
+end
 -- "scene:hide()"
 function scene:hide( event )
 

@@ -1,11 +1,8 @@
 -- used for handling if the user gave consent or not
 local M = {}
 M.consent = false; -- set the inital consent to be false
-
 function M.init()
-	 M.filename = "consent.txt"
-
-	return M.scoreText
+	 M.filename = "consent3.txt"
 end
 
 function M.set( value )

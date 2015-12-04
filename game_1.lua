@@ -2,6 +2,13 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 local analytics = require("gameAnal")
+local hintDetection = require("hint_mc")
+
+local coins = require("coins_data")
+coins.init()
+
+local items = require("items_data")
+items.init()
 
 question_generator = require ("questionGenerators.question1_generator")
 
@@ -60,13 +67,30 @@ end
 
 function checkAnswer(event)
    print ("Selected answer: " .. event.target.id)
+   
+   local loadItems = items.load()
+
    if ( event.target.id == 1 ) then
-      --analytics.correctAnswerG1()
+      analytics.correctAnswerG1()
+      updateCoins()
       nextLevel()
    else
       if incorrect then
-         --analytics.incorrectAnswerG1()
-         gameOver()
+         print(paramsTable)
+         if loadItems ~= nil and loadItems["mc_life"] ~= nil and loadItems["mc_life"] ~= false and paramsTable == nil then
+            analytics.incorrectAnswerG1()
+            paramsTable = {}
+            paramsTable["msg"] = "Uh oh, wrong again! Thanks to your powerup you have one more chance!"
+            paramsTable["height"] = 300
+            showPopup(paramsTable) 
+            items.spend("mc_life")
+            items.save()
+            event.target:setFillColor(black)
+         else
+            analytics.incorrectAnswerG1()
+            paramsTable = nil
+            gameOver()
+         end
       else
          --analytics.incorrectAnswerG1()
          event.target:setFillColor(black)
@@ -92,6 +116,21 @@ function flashPanda()
    incorrectPanda.rotation = 300
 end
 
+function showPopup(paramsTable)
+   local options = {
+      isModal = true,
+      effect = "fade",
+      time = 400,
+      params = paramsTable
+   }
+
+   composer.showOverlay( "bonus_popup", options )   
+end
+
+function scene:resumeGame()
+    --code to resume game
+end
+
 -- set typewriter font depending on device
 function setFont()
    local platform = system.getInfo("platformName")
@@ -105,6 +144,18 @@ function setFont()
     end
 
     return customFont
+end
+
+function updateCoins()
+   if coins.load() == nil then
+      coins.set(5)
+      coinText.text = 5;
+   else
+      local coin_val = coins.load() + 5
+      coins.set(coin_val)
+      coinText.text = coin_val;
+   end
+   coins.save()
 end
 
 -- Update the dialog text
@@ -182,13 +233,21 @@ function scene:create( event )
 
    --analytics.reset()
 
-   -- Set the background
-   background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
-   background.anchorX = 0.5
-   background.anchorY = 1
-   -- Place background image in center of screen
-   background.x = display.contentCenterX
-   background.y = display.contentHeight
+   -- Set the coin display
+   local curr_coins = coins.load()
+   if curr_coins == nil then
+      coinText = display.newText(0, 115, display.contentHeight - 45, native.systemFontBold, 40)
+   else
+      coinText = display.newText(curr_coins, 115, display.contentHeight - 45, native.systemFontBold, 40)
+   end
+   sceneGroup:insert(coinText)
+
+   -- Add the money bag
+   local money = display.newImageRect(sceneGroup, "assets/images/money.png", 200, 272)
+   money:scale(0.4, 0.4)
+   money.x = 50
+   money.y = display.contentHeight - 60
+   sceneGroup:insert(money)
 end
 
 -- "scene:show()"
@@ -213,6 +272,20 @@ function scene:show( event )
       }
 
       questionText = display.newText( introtext_options )
+
+      local loadItems = items.load()
+      if loadItems ~= nil and loadItems["star_bkg"] ~= nil then
+        background = display.newImageRect(sceneGroup, "assets/images/star_background.jpg",900,1425)
+      else
+        background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)
+      end
+       
+       background.anchorX = 0.5
+       background.anchorY = 1
+       -- Place background image in center of screen
+       background.x = display.contentCenterX
+       background.y = display.contentHeight
+       sceneGroup:insert(1, background)
    
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen..
