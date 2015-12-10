@@ -169,11 +169,4 @@ function D.reset()
 	g2Total = 0
 end
 
-function D.getQNum()
-	local query = { ["order"] = "-num", ["limit"] = "1" }
-	parse:getObjects( "questions_2", query, function(e)
-		 qnum = e.results[1].num
-	end)
-end
-
 return D

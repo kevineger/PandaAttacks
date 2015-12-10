@@ -35,10 +35,22 @@ end
 
 local centerX = display.contentCenterX
 local centerY = display.contentCenterY
-
+function getUserScore(username)
+    local query2 = {["where"] = {["scorePercent"] = {["$gt"] = analytics.getScorePercentG2() }}}
+    parse:getObjects( "score_2", query2, function(e)
+        print(#e.results)
+        print("start get objects 2")
+        if((#e.results)>5) then
+            display.newText(sceneGroup, "...", display.contentCenterX, display.contentCenterY+215, native.systemFont, 50)
+            display.newText(sceneGroup, (#e.results+1)..".", display.contentCenterX-200, display.contentCenterY+300, native.systemFont, 50 )
+            display.newText(sceneGroup, analytics.getCorrectAnswerG2().."/"..analytics.getTotalAnswerG2(), display.contentCenterX, display.contentCenterY+300, native.systemFont, 50 )
+            display.newText(sceneGroup, username, display.contentCenterX+200,display.contentCenterY+300, native.systemFont, 50)
+        end
+        print("end get objects 2")
+    end)
+end
 
 function getScoresG2(username)
-    
     local query = { ["order"] = "-scorePercent", ["limit"] = "5" }
     topPlayer = false
     parse:getObjects( "score_2", query, function(e)
@@ -46,6 +58,7 @@ function getScoresG2(username)
         display.newText(sceneGroup, "Score", display.contentCenterX, display.contentCenterY-225, native.systemFont, 50)
         display.newText(sceneGroup, "Username", display.contentCenterX+200, display.contentCenterY-225, native.systemFont, 50)
         y = display.contentCenterY-150
+        print("start get objects 1")
         for i=1, #e.results do
             score_data = e.results[i]
             if(username==score_data.username) then
@@ -56,20 +69,9 @@ function getScoresG2(username)
             display.newText(sceneGroup, score_data.username, display.contentCenterX+200, y, native.systemFont, 50)
             y = y + 75
         end
+        getUserScore(username)
+       print("end get objects 1")
     end)
-    print(analytics.getScorePercentG2())
-    local query2 = {["where"] = {["scorePercent"] = {["$gt"] = analytics.getScorePercentG2() }}}
-    parse:getObjects( "score_2", query2, function(e)
-        print(#e.results)
-        if((#e.results)>5) then
-            print("hit")
-            display.newText(sceneGroup, "...", display.contentCenterX, display.contentCenterY+215, native.systemFont, 50)
-            display.newText(sceneGroup, (#e.results+1)..".", display.contentCenterX-200, display.contentCenterY+300, native.systemFont, 50 )
-            display.newText(sceneGroup, analytics.getCorrectAnswerG2().."/"..analytics.getTotalAnswerG2(), display.contentCenterX, display.contentCenterY+300, native.systemFont, 50 )
-            display.newText(sceneGroup, username, display.contentCenterX+200,display.contentCenterY+300, native.systemFont, 50)
-        end
-    end)
-    
 end
 -- "scene:create()"
 function scene:create( event )

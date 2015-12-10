@@ -1,6 +1,14 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local analytics = require("gameAnal")
+local parse = require ("mod_parse")
+local envVars = require("globals")
+
+parse:init({
+    appId = envVars.appId,
+    apiKey = envVars.apiKey
+    })
+
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -14,17 +22,21 @@ local centerX = display.contentCenterX
 local centerY = display.contentCenterY
 
 local function addScore()
-    analytics.sendToParse("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["scorePercent"] = analytics.getScorePercentG2(), ["username"] = userInput.text})
-
-    local options =
-   {
-       effect = "crossFade",
-       time = 400,
-       params = {
-            username = userInput.text
-        }
-   }
-    composer.gotoScene("scoreboard_2", options)
+    parse:createObject("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["scorePercent"] = analytics.getScorePercentG2(), ["username"] = userInput.text}, function(e)
+        if not e.error then
+            print ("Sent Score To Parse")
+            local options =
+               {
+                   effect = "crossFade",
+                   time = 400,
+                   params = {
+                        username = userInput.text
+                    }
+               }
+             composer.gotoScene("scoreboard_2", options)
+        end
+    end)
+    
 end
 
 local function skipScore()

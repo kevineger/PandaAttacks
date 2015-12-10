@@ -1,5 +1,12 @@
 local composer = require( "composer" )
 local analytics = require("gameAnal")
+local parse = require ("mod_parse")
+local envVars = require("globals")
+
+parse:init({
+    appId = envVars.appId,
+    apiKey = envVars.apiKey
+    })
 
 local scene = composer.newScene()
 
@@ -22,28 +29,42 @@ end
 
 -- -------------------------------------------------------------------------------
 
+function sendQuestion(qnum)
+    parse:createObject("questions_2", {["question"] = question.text, ["error1"] = error1.text, ["error2"]=error2.text, ["error3"]=error3.text, ["error4"]=error4.text, ["num"]=qnum}, function(e)
+            if not e.error then
+                print("sent Question")
+                local options =
+                {
+                effect = "crossFade",
+                time = 400,
+                }
+
+                composer.gotoScene("select", options)
+            else
+                print (e.error)
+            end
+        end)
+end
 function submitQ()
-    analytics.getQNum()
-    -- submit to parse
-    analytics.sendToParse("questions_2", {["question"] = question.text, ["error1"] = error1.text, ["error2"]=error2.text, ["error3"]=error3.text, ["error4"]=error4.text})
-    composer.gotoScene("select", options)
-    question:removeSelf()
-    error1:removeSelf()
-    error2:removeSelf()
-    error3:removeSelf()
-    error4:removeSelf()
-    local options =
-       {
-           effect = "crossFade",
-           time = 400,
-       }
+
+    local query = { ["order"] = "-num", ["limit"] = "1" }
+    parse:getObjects( "questions_2", query, function(e)
+         qnum = e.results[1].num + 1
+         sendQuestion(qnum)
+    end)
+
+    -- question:removeSelf()
+    -- error1:removeSelf()
+    -- error2:removeSelf()
+    -- error3:removeSelf()
+    -- error4:removeSelf()
 
 end
 -- "scene:create()"
 function scene:create( event )
 
     sceneGroup = self.view
-    analytics.getQNum()
+
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
     background = display.newImageRect(sceneGroup, "assets/images/splashBg.jpg",900,1425)

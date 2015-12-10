@@ -2,6 +2,13 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 local question = require("questions")
 local analytics = require("gameAnal")
+local parse = require ("mod_parse")
+local envVars = require("globals")
+
+parse:init({
+    appId = envVars.appId,
+    apiKey = envVars.apiKey
+    })
 
 local coins = require("coins_data")
 coins.init()
@@ -112,7 +119,7 @@ local function clickError( event )
 end
 
 --sets a string to separate clickable objects
-local function setQuestion()
+local function setCodeBlock()
 
    --selections a string from the question bank
    s = errorCode[r].questionString
@@ -163,7 +170,13 @@ local function setQuestion()
    end
 
 end
-
+function getQuestion()
+   local query = { ["order"] = "-num", ["limit"] = "1" }
+    parse:getObjects( "questions_2", query, function(e)
+         qnum = e.results[1].num
+         -- sendQuestion(qnum)
+    end)
+end
 
 -- "scene:create()"
 function scene:create( event )
@@ -215,7 +228,7 @@ function scene:create( event )
    money.y = display.contentHeight - 105
    sceneGroup:insert(money)
    
-   
+   getQuestion()
 end
 
 
@@ -227,7 +240,6 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
-      setQuestion()
 
       local loadItems = items.load()
       
