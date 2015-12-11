@@ -24,7 +24,6 @@ local centerY = display.contentCenterY
 local function addScore()
     parse:createObject("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["scorePercent"] = analytics.getScorePercentG2(), ["username"] = userInput.text}, function(e)
         if not e.error then
-            print ("Sent Score To Parse")
             local options =
                {
                    effect = "crossFade",

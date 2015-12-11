@@ -11,6 +11,8 @@ local g2Incorrect = 0
 local g2Correct = 2
 local g2Total = 6
 
+local topPlayer = false
+
 parse:init({
 	appId = envVars.appId,
 	apiKey = envVars.apiKey
@@ -169,4 +171,14 @@ function D.reset()
 	g2Total = 0
 end
 
+function D.setTopPlayer()
+	topPlayer = true
+end
+
+function D.getTopPlayer()
+	return topPlayer
+end
+function D.resetTopPlayer()
+	topPlayer = false;
+end
 return D

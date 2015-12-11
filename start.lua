@@ -119,8 +119,8 @@ function scene:create( event )
    sceneGroup = self.view
 
    -- Load the audio tracks
-   --backingMusic = audio.loadStream("assets/audio/backgroundMusic.mp3")
-   --bassBoom = audio.loadSound("assets/audio/drum.mp3")
+   backingMusic = audio.loadStream("assets/audio/backgroundMusic.mp3")
+   bassBoom = audio.loadSound("assets/audio/drum.mp3")
 
    title = display.newImageRect(sceneGroup, "assets/images/PandaAttacks.png",800,300)
    title:scale(0.7, 0.7)

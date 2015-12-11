@@ -95,7 +95,7 @@ local function clickError( event )
       if lives == 0 then
          -- analytics.sendErrorsFound(errorsFound)
          -- analytics.sendToParse("game_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["gameResult"] = "lose", ["startTime"] = startTime, ["endTime"] = endTime})
-         analytics.sendToParse("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["totalPercent"] = analytics.getScorePercentG2()})
+         -- analytics.sendToParse("score_2", {["incorrect"] = analytics.getIncorrectAnswerG2(), ["correct"] = analytics.getCorrectAnswerG2(), ["total"] = analytics.getTotalAnswerG2(), ["totalPercent"] = analytics.getScorePercentG2()})
          composer.gotoScene("losing_2")
       elseif lives >= 1 then
          heart[lives]:removeSelf()
@@ -119,10 +119,7 @@ local function clickError( event )
 end
 
 --sets a string to separate clickable objects
-local function setCodeBlock()
-
-   --selections a string from the question bank
-   s = errorCode[r].questionString
+local function setCodeBlock(question, err1, err2, err3, err4)
 
    clickableString = {}
 
@@ -132,7 +129,7 @@ local function setCodeBlock()
 
    
    i=1
-   for str in string.gmatch(s, "([^%s]+)") do
+   for str in string.gmatch(question, "([^%s]+)") do
 
       if str == "%n" then
          y = y + 50
@@ -161,21 +158,30 @@ local function setCodeBlock()
 
    --sets which objects are errors
    for i = 1, #clickableString do
-      for j =1, #errorCode[r].error do
-         if clickableString[i].word == errorCode[r].error[j] then 
-            clickableString[i].error = true
-            break
-         end
+      if clickableString[i].word == err1 or clickableString[i].word == err2 or clickableString[i].word == err3 or clickableString[i].word == err4  then 
+         clickableString[i].error = true
       end
    end
 
 end
-function getQuestion()
+function setQuestion()
+   local query = {
+      ["where"] = {["num"] = r}
+   }
+   parse:getObjects("questions_2", query, function(ev)
+      if not ev.error then
+         setCodeBlock(ev.results[1].question, ev.results[1].error1, ev.results[1].error2, ev.results[1].error3, ev.results[1].error4 )
+      end
+   end)
+end
+function getRandom()
    local query = { ["order"] = "-num", ["limit"] = "1" }
     parse:getObjects( "questions_2", query, function(e)
          qnum = e.results[1].num
-         -- sendQuestion(qnum)
+         r = math.random(qnum)
+         setQuestion()
     end)
+
 end
 
 -- "scene:create()"
@@ -186,8 +192,6 @@ function scene:create( event )
    typeWriterFont = setFont()
 
    analytics.reset()
-
-   print(analytics.getIncorrectAnswerG2())
 
    local introOptions = {
    text = "Find the errors in the code given below.",
@@ -228,7 +232,7 @@ function scene:create( event )
    money.y = display.contentHeight - 105
    sceneGroup:insert(money)
    
-   getQuestion()
+   getRandom()
 end
 
 

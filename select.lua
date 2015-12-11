@@ -1,13 +1,14 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+local analytics = require("gameAnal")
+
 local coins = require("coins_data")
 coins.init()
 
 local items = require("items_data")
 items.init()
 
-local score = require("score")
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -107,7 +108,7 @@ function scene:create( event )
    sceneGroup:insert(money)
 
    --adds create question button
-   if(topPlayer) then
+   if(analytics.getTopPlayer() == true) then
    createQ = display.newImageRect(sceneGroup, "assets/images/create_questions.png", 300, 150)
    createQ.x = display.contentCenterX
    createQ.y = display.contentCenterY+400
